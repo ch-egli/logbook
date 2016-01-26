@@ -1,3 +1,4 @@
+#### Application startup:
 
 1. Create and start container with postgresql database: 
    * sudo docker create --name mypostgresdb-data -v /home/christian/CData/workspaces/docker/volumes/postgres-data:/var/lib/postgresql/data postgres:9.4.5 echo "data-only container for postgres"
