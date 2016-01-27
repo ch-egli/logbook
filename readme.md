@@ -9,7 +9,7 @@
    * sudo docker run -p 8181:8181 -d chregli/logbook
    
 3. Connect to REST backend: 
-   * http://54.93.84.56:8181/swagger-ui/index.html
+   * http://54.93.84.56:8181/swagger-ui.html
    * http://54.93.84.56:8181/workouts
    
 4. Start frontend application: 
