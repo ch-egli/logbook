@@ -19,6 +19,7 @@ import java.util.List;
 /**
  * Created by christian on 1/24/16.
  */
+@CrossOrigin // allow cross-origin requests for angular frontends...
 @RestController
 public class WorkoutController {
 
