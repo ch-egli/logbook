@@ -72,12 +72,6 @@ public final class ExcelExporter {
     }
 
     private static String getSheetNameForDate(LocalDate date) {
-/*
-        TemporalField weekOfYear = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
-        Integer weekNumber = date.get(weekOfYear);
-        Integer sheetNumber = weekNumber;
-*/
-
         Locale locale = new Locale("de", "CH");
         Integer weekOfYear = date.get(WeekFields.of(locale).weekOfWeekBasedYear());
         return weekOfYear.toString();
