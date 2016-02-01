@@ -37,12 +37,16 @@ public class ComputeResultController {
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @RequestMapping(value="/workouts/excelresults/{userId}", method=RequestMethod.GET)
-    public void getExportedExcelFile(@PathVariable String userId, HttpServletResponse response) {
+    @RequestMapping(value="/workouts/excelresults/{year}/{userId}", method=RequestMethod.GET)
+    public void getExportedExcelFile(@PathVariable String userId, @PathVariable Integer year, HttpServletResponse response) {
 
-        List<Workout> userWorkouts = workoutRepository.findByBenutzer(userId);
+        if (year < 2000 || year > 2030) {
+            throw new ResourceNotFoundException("No workouts for year '" + year + "' found");
+        }
+
+        List<Workout> userWorkouts = workoutRepository.findByYearAndBenutzer(year, userId);
         if(userWorkouts.isEmpty()) {
-            throw new ResourceNotFoundException("No workouts for user " + userId + " found");
+            throw new ResourceNotFoundException("No workouts for year '" + year + "' and user '" + userId + "' found");
         }
 
         final Resource resource = new ClassPathResource("workouts.xlsx");

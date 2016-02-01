@@ -10,7 +10,8 @@ import java.sql.Date;
 /**
  * Created by christian on 1/24/16.
  */
-@Entity(name="tr_unit")
+@Entity
+@Table(name="tr_unit")
 public class Workout {
 
     @Id
