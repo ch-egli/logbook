@@ -8,19 +8,24 @@ import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
 /**
- * Created by christian on 1/24/16.
+ * Entity containing a training unit.
+ *
+ * @author Christian Egli
+ * @since 2/1/16.
  */
-@Entity(name="tr_unit")
+@Entity
+@Table(name="workout")
 public class Workout {
 
     @Id
-    @SequenceGenerator(name="tr_unit_id_seq", sequenceName="tr_unit_id_seq", allocationSize=1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="tr_unit_id_seq")
+    @SequenceGenerator(name="workout_id_seq", sequenceName="workout_id_seq", allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="workout_id_seq")
     private Long id;
 
-    @Column
     @NotNull
-    private String benutzer;
+    //@ManyToOne
+    //@JoinColumn(name = "benutzer", nullable = false)
+    private String benutzername;
 
     @Column
     @NotNull
@@ -31,6 +36,9 @@ public class Workout {
     private String ort;
 
     @Column
+    private String wettkampf;
+
+    @Column
     @Min(0) @Max(20)
     private Integer schlaf;
 
@@ -39,12 +47,56 @@ public class Workout {
     private Integer gefuehl;
 
     @Column
-    @Min(0) @Max(1)
+    @Min(0) @Max(9)
     private Integer lead;
 
     @Column
-    @Min(0) @Max(1)
+    @Min(0) @Max(9)
     private Integer bouldern;
+
+    @Column
+    @Min(0) @Max(9)
+    private Integer campus;
+
+    @Column
+    @Min(0) @Max(9)
+    private Integer kraftraum;
+
+    @Column
+    @Min(0) @Max(9)
+    private Integer dehnen;
+
+    @Column
+    @Min(0) @Max(9)
+    private Integer mentaltraining;
+
+    @Column
+    private String geraete;
+
+    @Column
+    private String routen;
+
+    @Column
+    private String art;
+
+    @Column
+    private String zuege;
+
+    @Column
+    @Min(0) @Max(10000)
+    private Integer wiederholungen;
+
+    @Column
+    @Min(0) @Max(10000)
+    private Integer bloecke;
+
+    @Column
+    @Min(0) @Max(10000)
+    private Integer serien;
+
+    @Column
+    @Min(0) @Max(10000)
+    private Integer pausen;
 
     @Column
     @Min(6) @Max(20)
@@ -66,6 +118,9 @@ public class Workout {
     @Min(0) @Max(600)
     private Integer trainingszeit;
 
+    @Column
+    private String sonstiges;
+
     public Long getId() {
         return id;
     }
@@ -74,12 +129,12 @@ public class Workout {
         this.id = id;
     }
 
-    public String getBenutzer() {
-        return benutzer;
+    public String getBenutzername() {
+        return benutzername;
     }
 
-    public void setBenutzer(String benutzer) {
-        this.benutzer = benutzer;
+    public void setBenutzername(String benutzername) {
+        this.benutzername = benutzername;
     }
 
     public Date getDatum() {
@@ -96,6 +151,14 @@ public class Workout {
 
     public void setOrt(String ort) {
         this.ort = ort;
+    }
+
+    public String getWettkampf() {
+        return wettkampf;
+    }
+
+    public void setWettkampf(String wettkampf) {
+        this.wettkampf = wettkampf;
     }
 
     public Integer getSchlaf() {
@@ -128,6 +191,102 @@ public class Workout {
 
     public void setBouldern(Integer bouldern) {
         this.bouldern = bouldern;
+    }
+
+    public Integer getCampus() {
+        return campus;
+    }
+
+    public void setCampus(Integer campus) {
+        this.campus = campus;
+    }
+
+    public Integer getKraftraum() {
+        return kraftraum;
+    }
+
+    public void setKraftraum(Integer kraftraum) {
+        this.kraftraum = kraftraum;
+    }
+
+    public Integer getDehnen() {
+        return dehnen;
+    }
+
+    public void setDehnen(Integer dehnen) {
+        this.dehnen = dehnen;
+    }
+
+    public Integer getMentaltraining() {
+        return mentaltraining;
+    }
+
+    public void setMentaltraining(Integer mentaltraining) {
+        this.mentaltraining = mentaltraining;
+    }
+
+    public String getGeraete() {
+        return geraete;
+    }
+
+    public void setGeraete(String geraete) {
+        this.geraete = geraete;
+    }
+
+    public String getRouten() {
+        return routen;
+    }
+
+    public void setRouten(String routen) {
+        this.routen = routen;
+    }
+
+    public String getArt() {
+        return art;
+    }
+
+    public void setArt(String art) {
+        this.art = art;
+    }
+
+    public String getZuege() {
+        return zuege;
+    }
+
+    public void setZuege(String zuege) {
+        this.zuege = zuege;
+    }
+
+    public Integer getWiederholungen() {
+        return wiederholungen;
+    }
+
+    public void setWiederholungen(Integer wiederholungen) {
+        this.wiederholungen = wiederholungen;
+    }
+
+    public Integer getBloecke() {
+        return bloecke;
+    }
+
+    public void setBloecke(Integer bloecke) {
+        this.bloecke = bloecke;
+    }
+
+    public Integer getSerien() {
+        return serien;
+    }
+
+    public void setSerien(Integer serien) {
+        this.serien = serien;
+    }
+
+    public Integer getPausen() {
+        return pausen;
+    }
+
+    public void setPausen(Integer pausen) {
+        this.pausen = pausen;
     }
 
     public Integer getBelastung() {
@@ -168,5 +327,13 @@ public class Workout {
 
     public void setTrainingszeit(Integer trainingszeit) {
         this.trainingszeit = trainingszeit;
+    }
+
+    public String getSonstiges() {
+        return sonstiges;
+    }
+
+    public void setSonstiges(String bemerkungen) {
+        this.sonstiges = bemerkungen;
     }
 }

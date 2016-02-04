@@ -7,18 +7,18 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author Christian Egli
  * @since 2/1/16.
  */
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class ResourceNotFoundException extends RuntimeException {
+@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+public class InternalServerException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public ResourceNotFoundException() {}
+    public InternalServerException() {}
 
-    public ResourceNotFoundException(String message) {
+    public InternalServerException(String message) {
         super(message);
     }
 
-    public ResourceNotFoundException(String message, Throwable cause) {
+    public InternalServerException(String message, Throwable cause) {
         super(message, cause);
     }
 }

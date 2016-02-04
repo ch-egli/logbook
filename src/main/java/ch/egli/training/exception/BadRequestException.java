@@ -7,18 +7,18 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author Christian Egli
  * @since 2/1/16.
  */
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class ResourceNotFoundException extends RuntimeException {
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class BadRequestException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public ResourceNotFoundException() {}
+    public BadRequestException() {}
 
-    public ResourceNotFoundException(String message) {
+    public BadRequestException(String message) {
         super(message);
     }
 
-    public ResourceNotFoundException(String message, Throwable cause) {
+    public BadRequestException(String message, Throwable cause) {
         super(message, cause);
     }
 }

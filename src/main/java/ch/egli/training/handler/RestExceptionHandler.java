@@ -20,6 +20,12 @@ import java.util.Date;
 import java.util.List;
 
 
+/**
+ * REST exception handler.
+ *
+ * @author Christian Egli
+ * @since 2/1/16.
+ */
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler  {
 

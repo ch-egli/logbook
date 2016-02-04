@@ -14,3 +14,11 @@
    
 4. Start frontend application: 
    * ...
+
+   
+#### ToDo
+
+1. Security...
+2. Environment variables
+3. ...
+
