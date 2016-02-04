@@ -2,7 +2,6 @@ package ch.egli.training.controller;
 
 import ch.egli.training.exception.BadRequestException;
 import ch.egli.training.exception.InternalServerException;
-import ch.egli.training.exception.ResourceNotFoundException;
 import ch.egli.training.model.Benutzer;
 import ch.egli.training.model.Workout;
 import ch.egli.training.repository.BenutzerRepository;
@@ -42,6 +41,9 @@ public class ComputeResultController {
     @Autowired
     private BenutzerRepository benutzerRepository;
 
+    @Autowired
+    ExcelExporter excelExporter;
+
     @RequestMapping(value="/workouts/charts", method= RequestMethod.GET)
     public ResponseEntity<?> computeChart() {
         Iterable<Workout> allWorkouts = workoutRepository.findAll();
@@ -51,7 +53,7 @@ public class ComputeResultController {
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @RequestMapping(value="/workouts/excelresults/{year}/{benutzername}", method=RequestMethod.GET)
+    @RequestMapping(value="/user/{benutzername}/excelresults/{year}", method=RequestMethod.GET)
     public void getExportedExcelFile(@PathVariable Integer year, @PathVariable String benutzername, HttpServletResponse response) {
 
         if (year < 2000 || year > 2030) {
@@ -70,7 +72,7 @@ public class ComputeResultController {
 
         final Resource resource = new ClassPathResource("workouts.xlsx");
         try (InputStream inputStream = resource.getInputStream()) {
-            ByteArrayOutputStream outputStream = (ByteArrayOutputStream) ExcelExporter.exportAllWorkouts(userWorkouts);
+            ByteArrayOutputStream outputStream = (ByteArrayOutputStream) excelExporter.exportAllWorkouts(userWorkouts);
             InputStream myStream = new ByteArrayInputStream(outputStream.toByteArray());
 
             // Set the content type and attachment header.

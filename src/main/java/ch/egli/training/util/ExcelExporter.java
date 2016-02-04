@@ -7,6 +7,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 import java.io.ByteArrayOutputStream;
@@ -25,7 +26,8 @@ import java.util.Locale;
  * @author Christian Egli
  * @since 1/31/16.
  */
-public final class ExcelExporter {
+@Component
+public class ExcelExporter {
 
     private static final Logger LOGGER = LogManager.getLogger(ExcelExporter.class.getName());
 
@@ -35,7 +37,7 @@ public final class ExcelExporter {
      * @param workouts list of workouts for a given person
      * @return output stream of Excel workbook containing workout entries
      */
-    public static OutputStream exportAllWorkouts(List<Workout> workouts) {
+    public OutputStream exportAllWorkouts(List<Workout> workouts) {
 
         OutputStream outputStream = null;
         Resource resource = new ClassPathResource("workouts.xlsx");
@@ -58,7 +60,7 @@ public final class ExcelExporter {
      * @throws IOException
      * @throws InvalidFormatException
      */
-    private static OutputStream exportToExcel(@NotNull final InputStream is, List<Workout> workouts) throws IOException, InvalidFormatException {
+    private OutputStream exportToExcel(@NotNull final InputStream is, List<Workout> workouts) throws IOException, InvalidFormatException {
 
         final Workbook workbook = WorkbookFactory.create(is);
         is.close();
@@ -144,11 +146,13 @@ public final class ExcelExporter {
      * @param cellStyle style to apply (ignored if null)
      * @param val numeric value to insert
      */
-    private static void addNumberToCellInRowAtPosition(final Row row, final int pos, final CellStyle cellStyle, final int val) {
-        final Cell cell = row.getCell(pos);
-        cell.setCellValue(val);
-        if (cellStyle != null) {
-            cell.setCellStyle(cellStyle);
+    private static void addNumberToCellInRowAtPosition(final Row row, final int pos, final CellStyle cellStyle, final Integer val) {
+        if (val != null) {
+            final Cell cell = row.getCell(pos);
+            cell.setCellValue(val);
+            if (cellStyle != null) {
+                cell.setCellStyle(cellStyle);
+            }
         }
     }
 

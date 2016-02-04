@@ -1,9 +1,9 @@
 package ch.egli.training.controller;
 
 import ch.egli.training.exception.BadRequestException;
-import ch.egli.training.exception.ResourceNotFoundException;
 import ch.egli.training.model.Workout;
 import ch.egli.training.repository.WorkoutRepository;
+import ch.egli.training.util.ResourceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,24 +27,31 @@ public class WorkoutController {
     @Autowired
     private WorkoutRepository workoutRepository;
 
-    @RequestMapping(value="/workouts", method= RequestMethod.GET)
-    public ResponseEntity<Iterable<Workout>> getAllWorkouts() {
-        final Iterable<Workout> allWorkouts = workoutRepository.findAll();
+    @Autowired
+    ResourceValidator resourceValidator;
+
+    @RequestMapping(value="/users/{benutzername}/workouts", method= RequestMethod.GET)
+    public ResponseEntity<Iterable<Workout>> getAllWorkouts(@PathVariable String benutzername) {
+        resourceValidator.validateUser(benutzername);
+        final Iterable<Workout> allWorkouts = workoutRepository.findByBenutzername(benutzername);
         return new ResponseEntity<Iterable<Workout>>(allWorkouts, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/workouts/{workoutId}", method= RequestMethod.GET)
-    public ResponseEntity<?> getWorkout(@PathVariable Long workoutId) {
-        this.verifyWorkout(workoutId);
-        final Workout workout = workoutRepository.findOne(workoutId);
+    @RequestMapping(value="/users/{benutzername}/workouts/{workoutId}", method= RequestMethod.GET)
+    public ResponseEntity<?> getWorkout(@PathVariable String benutzername, @PathVariable Long workoutId) {
+        resourceValidator.validateUser(benutzername);
+        resourceValidator.validateWorkout(workoutId);
+        final Workout workout = workoutRepository.findByBenutzernameAndId(benutzername, workoutId);
         return new ResponseEntity<>(workout, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/workouts", method= RequestMethod.POST)
-    public ResponseEntity<?> createWorkout(@Valid @RequestBody Workout workout) {
+    @RequestMapping(value="/users/{benutzername}/workouts", method= RequestMethod.POST)
+    public ResponseEntity<?> createWorkout(@PathVariable String benutzername, @Valid @RequestBody Workout workout) {
+        resourceValidator.validateUser(benutzername);
         final HttpHeaders responseHeaders = new HttpHeaders();
         try {
             // save the new workout...
+            workout.setBenutzername(benutzername);
             workout = workoutRepository.save(workout);
 
             // Set the location header for the newly created resource
@@ -57,31 +64,26 @@ public class WorkoutController {
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value="/workouts/{workoutId}", method= RequestMethod.PUT)
-    public ResponseEntity<?> updateWorkout(@Valid @RequestBody Workout workout, @PathVariable Long workoutId) {
-        this.verifyWorkout(workoutId);
+    @RequestMapping(value="/users/{benutzername}/workouts/{workoutId}", method= RequestMethod.PUT)
+    public ResponseEntity<?> updateWorkout(@RequestBody Workout workout, @PathVariable String benutzername, @PathVariable Long workoutId) {
+        resourceValidator.validateUser(benutzername);
+        resourceValidator.validateWorkout(workoutId);
 
         // only allow updating a workout with an id that corresponds to the given workoutId!
         // otherwise we allow insert operation with PUT...
         workout.setId(workoutId);
+        workout.setBenutzername(benutzername);
 
         workout = workoutRepository.save(workout);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @RequestMapping(value="/workouts/{workoutId}", method= RequestMethod.DELETE)
-    public ResponseEntity<?> deleteWorkout(@PathVariable Long workoutId) {
-        this.verifyWorkout(workoutId);
+    @RequestMapping(value="/users/{benutzername}/workouts/{workoutId}", method= RequestMethod.DELETE)
+    public ResponseEntity<?> deleteWorkout(@PathVariable String benutzername, @PathVariable Long workoutId) {
+        resourceValidator.validateUser(benutzername);
+        resourceValidator.validateWorkout(workoutId);
         workoutRepository.delete(workoutId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    protected void verifyWorkout(Long workoutId) throws ResourceNotFoundException {
-        Workout workout = workoutRepository.findOne(workoutId);
-        if (workout == null) {
-            throw new ResourceNotFoundException("Workout with id " + workoutId + " not found");
-        }
-    }
-
 
 }

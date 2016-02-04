@@ -1,9 +1,9 @@
 package ch.egli.training.controller;
 
 import ch.egli.training.exception.BadRequestException;
-import ch.egli.training.exception.ResourceNotFoundException;
 import ch.egli.training.model.Benutzer;
 import ch.egli.training.repository.BenutzerRepository;
+import ch.egli.training.util.ResourceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,6 +27,9 @@ public class BenutzerController {
     @Autowired
     BenutzerRepository benutzerRepository;
 
+    @Autowired
+    ResourceValidator resourceValidator;
+
     @RequestMapping(value="/users", method= RequestMethod.GET)
     public ResponseEntity<Iterable<Benutzer>> getAllUsers() {
         final Iterable<Benutzer> allUsers = benutzerRepository.findAll();
@@ -35,7 +38,7 @@ public class BenutzerController {
 
     @RequestMapping(value="/users/{benutzername}", method= RequestMethod.GET)
     public ResponseEntity<?> getUser(@PathVariable String benutzername) {
-        this.verifyUser(benutzername);
+        resourceValidator.validateUser(benutzername);
         final Benutzer benutzer = benutzerRepository.findByBenutzername(benutzername);
         return new ResponseEntity<>(benutzer, HttpStatus.OK);
     }
@@ -59,7 +62,7 @@ public class BenutzerController {
 
     @RequestMapping(value="/users/{benutzername}", method= RequestMethod.PUT)
     public ResponseEntity<?> updateUser(@Valid @RequestBody Benutzer benutzer, @PathVariable String benutzername) {
-        this.verifyUser(benutzername);
+        resourceValidator.validateUser(benutzername);
 
         // only allow updating a user with an benutzername that corresponds to the given benutzername!
         // otherwise we allow insert operations with PUT...
@@ -71,15 +74,9 @@ public class BenutzerController {
 
     @RequestMapping(value="/users/{benutzername}", method= RequestMethod.DELETE)
     public ResponseEntity<?> deleteUser(@PathVariable String benutzername) {
-        this.verifyUser(benutzername);
+        resourceValidator.validateUser(benutzername);
         benutzerRepository.deleteByBenutzername(benutzername);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    protected void verifyUser(String benutzername) throws ResourceNotFoundException {
-        Benutzer benutzer = benutzerRepository.findByBenutzername(benutzername);
-        if (benutzer == null) {
-            throw new ResourceNotFoundException("User '" + benutzername + "' not found");
-        }
-    }
 }
