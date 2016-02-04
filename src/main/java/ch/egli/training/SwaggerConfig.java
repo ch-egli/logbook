@@ -19,7 +19,7 @@ public class SwaggerConfig {
 				.groupName("workouts")
 				.apiInfo(apiInfo())
 				.select()
-				.paths(PathSelectors.regex("/workout.*"))
+				// .paths(PathSelectors.regex("/workout.*"))
 				.build();
 	}
 

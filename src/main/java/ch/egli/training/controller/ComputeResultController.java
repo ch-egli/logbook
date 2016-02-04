@@ -1,9 +1,12 @@
 package ch.egli.training.controller;
 
 import ch.egli.training.exception.ResourceNotFoundException;
+import ch.egli.training.model.Benutzer;
 import ch.egli.training.model.Workout;
+import ch.egli.training.repository.BenutzerRepository;
 import ch.egli.training.repository.WorkoutRepository;
 import ch.egli.training.util.ExcelExporter;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -28,6 +31,9 @@ public class ComputeResultController {
     @Autowired
     private WorkoutRepository workoutRepository;
 
+    @Autowired
+    private BenutzerRepository benutzerRepository;
+
     @RequestMapping(value="/workouts/charts", method= RequestMethod.GET)
     public ResponseEntity<?> computeChart() {
         Iterable<Workout> allWorkouts = workoutRepository.findAll();
@@ -40,11 +46,22 @@ public class ComputeResultController {
     @RequestMapping(value="/workouts/excelresults/{year}/{userId}", method=RequestMethod.GET)
     public void getExportedExcelFile(@PathVariable String userId, @PathVariable Integer year, HttpServletResponse response) {
 
+        Benutzer benutzer = null;
         if (year < 2000 || year > 2030) {
             throw new ResourceNotFoundException("No workouts for year '" + year + "' found");
         }
 
-        List<Workout> userWorkouts = workoutRepository.findByYearAndBenutzer(year, userId);
+        if (!NumberUtils.isDigits(userId)) {
+            throw new ResourceNotFoundException("UserId '" + userId + "' is not a number");
+        } else {
+            benutzer = benutzerRepository.findOne(Long.valueOf(userId));
+            if (benutzer == null) {
+                throw new ResourceNotFoundException("User with with id " + userId + " not found");
+            }
+
+        }
+
+        List<Workout> userWorkouts = workoutRepository.findByYearAndBenutzer(year, benutzer);
         if(userWorkouts.isEmpty()) {
             throw new ResourceNotFoundException("No workouts for year '" + year + "' and user '" + userId + "' found");
         }

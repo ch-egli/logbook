@@ -12,9 +12,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.List;
 
 /**
  * Created by christian on 1/24/16.
@@ -24,7 +21,7 @@ import java.util.List;
 public class WorkoutController {
 
     @Autowired
-    WorkoutRepository workoutRepository;
+    private WorkoutRepository workoutRepository;
 
     @RequestMapping(value="/workouts", method= RequestMethod.GET)
     public ResponseEntity<Iterable<Workout>> getAllWorkouts() {
@@ -40,13 +37,18 @@ public class WorkoutController {
     }
 
     @RequestMapping(value="/workouts", method= RequestMethod.POST)
-    public ResponseEntity<?> createPoll(@Valid @RequestBody Workout workout) {
-        workout = workoutRepository.save(workout);
-
-        // Set the location header for the newly created resource
+    public ResponseEntity<?> createWorkout(@Valid @RequestBody Workout workout) {
         final HttpHeaders responseHeaders = new HttpHeaders();
-        final URI newWorkoutUri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(workout.getId()).toUri();
-        responseHeaders.setLocation(newWorkoutUri);
+        try {
+            // save the new workout...
+            workout = workoutRepository.save(workout);
+
+            // Set the location header for the newly created resource
+            final URI newWorkoutUri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(workout.getId()).toUri();
+            responseHeaders.setLocation(newWorkoutUri);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Workout could not be saved in the database: " + e.getMessage());
+        }
 
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
@@ -67,7 +69,7 @@ public class WorkoutController {
 
     protected void verifyWorkout(Long workoutId) throws ResourceNotFoundException {
         Workout workout = workoutRepository.findOne(workoutId);
-        if(workout == null) {
+        if (workout == null) {
             throw new ResourceNotFoundException("Workout with id " + workoutId + " not found");
         }
     }
