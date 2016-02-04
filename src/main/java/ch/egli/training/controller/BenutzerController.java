@@ -1,5 +1,6 @@
 package ch.egli.training.controller;
 
+import ch.egli.training.exception.BadRequestException;
 import ch.egli.training.exception.ResourceNotFoundException;
 import ch.egli.training.model.Benutzer;
 import ch.egli.training.repository.BenutzerRepository;
@@ -47,7 +48,7 @@ public class BenutzerController {
             final URI newUserUri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(benutzer.getId()).toUri();
             responseHeaders.setLocation(newUserUri);
         } catch (Exception e) {
-            throw new ResourceNotFoundException("User could not be saved in the database: " + e.getMessage());
+            throw new BadRequestException("User could not be saved in the database: " + e.getMessage());
         }
 
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
@@ -62,14 +63,14 @@ public class BenutzerController {
         benutzer.setBenutzername(benutzername);
 
         benutzer = benutzerRepository.save(benutzer);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(value="/users/{benutzername}", method= RequestMethod.DELETE)
     public ResponseEntity<?> deleteUser(@PathVariable String benutzername) {
         this.verifyUser(benutzername);
         benutzerRepository.deleteByBenutzername(benutzername);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     protected void verifyUser(String benutzername) throws ResourceNotFoundException {

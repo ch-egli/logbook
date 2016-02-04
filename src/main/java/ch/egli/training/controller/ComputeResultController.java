@@ -1,5 +1,7 @@
 package ch.egli.training.controller;
 
+import ch.egli.training.exception.BadRequestException;
+import ch.egli.training.exception.InternalServerException;
 import ch.egli.training.exception.ResourceNotFoundException;
 import ch.egli.training.model.Benutzer;
 import ch.egli.training.model.Workout;
@@ -46,17 +48,17 @@ public class ComputeResultController {
     public void getExportedExcelFile(@PathVariable Integer year, @PathVariable String benutzername, HttpServletResponse response) {
 
         if (year < 2000 || year > 2030) {
-            throw new ResourceNotFoundException("No workouts for year '" + year + "' found");
+            throw new BadRequestException("No workouts for year '" + year + "' found");
         }
 
         Benutzer benutzer = benutzerRepository.findByBenutzername(benutzername);
         if (benutzer == null) {
-            throw new ResourceNotFoundException("User with with id " + benutzername + " not found");
+            throw new BadRequestException("User with with id " + benutzername + " not found");
         }
 
         List<Workout> userWorkouts = workoutRepository.findByYearAndBenutzer(year, benutzername);
         if (userWorkouts.isEmpty()) {
-            throw new ResourceNotFoundException("No workouts for year '" + year + "' and user '" + benutzername + "' found");
+            System.out.println("No workouts for year '" + year + "' and user '" + benutzername + "' found");
         }
 
         final Resource resource = new ClassPathResource("workouts.xlsx");
@@ -75,7 +77,7 @@ public class ComputeResultController {
             response.flushBuffer();
 
         } catch (Exception ex) {
-            throw new RuntimeException("unexpected exception during export to Excel: ", ex);
+            throw new InternalServerException("unexpected exception during export to Excel: ", ex);
         }
 
     }

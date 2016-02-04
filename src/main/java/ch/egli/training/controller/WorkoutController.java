@@ -1,7 +1,7 @@
 package ch.egli.training.controller;
 
+import ch.egli.training.exception.BadRequestException;
 import ch.egli.training.exception.ResourceNotFoundException;
-import ch.egli.training.exception.ResourceNotSavedException;
 import ch.egli.training.model.Workout;
 import ch.egli.training.repository.WorkoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ public class WorkoutController {
             final URI newWorkoutUri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(workout.getId()).toUri();
             responseHeaders.setLocation(newWorkoutUri);
         } catch (Exception e) {
-            throw new ResourceNotFoundException("Workout could not be saved in the database: " + e.getMessage());
+            throw new BadRequestException("Workout could not be saved in the database: " + e.getMessage());
         }
 
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
@@ -63,14 +63,14 @@ public class WorkoutController {
         workout.setId(workoutId);
 
         workout = workoutRepository.save(workout);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(value="/workouts/{workoutId}", method= RequestMethod.DELETE)
     public ResponseEntity<?> deleteWorkout(@PathVariable Long workoutId) {
         this.verifyWorkout(workoutId);
         workoutRepository.delete(workoutId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     protected void verifyWorkout(Long workoutId) throws ResourceNotFoundException {

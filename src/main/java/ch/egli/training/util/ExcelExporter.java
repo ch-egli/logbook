@@ -34,8 +34,6 @@ public final class ExcelExporter {
         Resource resource = new ClassPathResource("workouts.xlsx");
         try (InputStream inputStream = resource.getInputStream()) {
             outputStream = exportToExcel(inputStream, workouts);
-
-
         } catch (Exception ex) {
             System.out.println("Excel Exception " + ex.getMessage());
         }
