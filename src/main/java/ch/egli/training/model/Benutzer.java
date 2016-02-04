@@ -5,7 +5,10 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
- * Created by christian on 2/1/16.
+ * Entity containing a user.
+ *
+ * @author Christian Egli
+ * @since 2/1/16.
  */
 @Entity
 @Table(name="benutzer")

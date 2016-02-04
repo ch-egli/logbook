@@ -8,6 +8,8 @@ import ch.egli.training.model.Workout;
 import ch.egli.training.repository.BenutzerRepository;
 import ch.egli.training.repository.WorkoutRepository;
 import ch.egli.training.util.ExcelExporter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -23,11 +25,16 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * Created by christian on 1/30/16.
+ * REST controller for accessing logbook analysis results.
+ *
+ * @author Christian Egli
+ * @since 2/1/16.
  */
 @CrossOrigin // allow cross-origin requests for angular frontends...
 @RestController
 public class ComputeResultController {
+
+    private static final Logger LOGGER = LogManager.getLogger(ComputeResultController.class.getName());
 
     @Autowired
     private WorkoutRepository workoutRepository;
@@ -58,7 +65,7 @@ public class ComputeResultController {
 
         List<Workout> userWorkouts = workoutRepository.findByYearAndBenutzer(year, benutzername);
         if (userWorkouts.isEmpty()) {
-            System.out.println("No workouts for year '" + year + "' and user '" + benutzername + "' found");
+            LOGGER.warn("No workouts for year '{}' and user '{}' found", year, benutzername);
         }
 
         final Resource resource = new ClassPathResource("workouts.xlsx");

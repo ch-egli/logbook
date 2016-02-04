@@ -15,7 +15,10 @@ import javax.validation.Valid;
 import java.net.URI;
 
 /**
- * Created by christian on 1/24/16.
+ * REST controller for accessing workouts/training units.
+ *
+ * @author Christian Egli
+ * @since 2/1/16.
  */
 @CrossOrigin // allow cross-origin requests for angular frontends...
 @RestController

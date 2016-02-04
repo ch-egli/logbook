@@ -1,6 +1,8 @@
 package ch.egli.training.util;
 
 import ch.egli.training.model.Workout;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.core.io.ClassPathResource;
@@ -18,9 +20,14 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by christian on 1/31/16.
+ * Class providing methods to export workout date to an Excel file.
+ *
+ * @author Christian Egli
+ * @since 1/31/16.
  */
 public final class ExcelExporter {
+
+    private static final Logger LOGGER = LogManager.getLogger(ExcelExporter.class.getName());
 
     /**
      * Export an Excel workbook as an output stream.
@@ -35,7 +42,7 @@ public final class ExcelExporter {
         try (InputStream inputStream = resource.getInputStream()) {
             outputStream = exportToExcel(inputStream, workouts);
         } catch (Exception ex) {
-            System.out.println("Excel Exception " + ex.getMessage());
+            LOGGER.error("Error during Excel export: ", ex);
         }
 
         return outputStream;

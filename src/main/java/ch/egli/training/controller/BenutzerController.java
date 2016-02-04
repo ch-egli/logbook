@@ -15,7 +15,10 @@ import javax.validation.Valid;
 import java.net.URI;
 
 /**
- * Created by christian on 2/4/16.
+ * REST controller for accessing users.
+ *
+ * @author Christian Egli
+ * @since 2/1/16.
  */
 @CrossOrigin // allow cross-origin requests for angular frontends...
 @RestController

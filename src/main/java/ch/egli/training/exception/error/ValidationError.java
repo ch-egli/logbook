@@ -1,5 +1,9 @@
 package ch.egli.training.exception.error;
 
+/**
+ * @author Christian Egli
+ * @since 2/1/16.
+ */
 public class ValidationError {
 
 	private String code;

@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Christian Egli
+ * @since 2/1/16.
+ */
 public class ErrorDetail {
 	
 	private String title;

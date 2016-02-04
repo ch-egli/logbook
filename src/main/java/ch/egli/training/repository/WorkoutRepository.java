@@ -8,7 +8,10 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 /**
- * Created by christian on 1/24/16.
+ * Repository for entity Benutzer.
+ *
+ * @author Christian Egli
+ * @since 24/1/16.
  */
 public interface WorkoutRepository extends CrudRepository<Workout, Long> {
 

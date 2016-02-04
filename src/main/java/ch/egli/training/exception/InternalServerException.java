@@ -4,7 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * Created by christian on 1/25/16.
+ * @author Christian Egli
+ * @since 2/1/16.
  */
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 public class InternalServerException extends RuntimeException {

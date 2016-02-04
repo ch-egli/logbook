@@ -8,7 +8,10 @@ import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
 /**
- * Created by christian on 1/24/16.
+ * Entity containing a training unit.
+ *
+ * @author Christian Egli
+ * @since 2/1/16.
  */
 @Entity
 @Table(name="workout")

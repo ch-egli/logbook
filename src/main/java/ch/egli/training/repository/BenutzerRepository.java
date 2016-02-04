@@ -6,7 +6,10 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Created by christian on 2/1/16.
+ * Repository for entity Benutzer.
+ *
+ * @author Christian Egli
+ * @since 2/1/16.
  */
 public interface BenutzerRepository extends CrudRepository<Benutzer, Long> {
 
