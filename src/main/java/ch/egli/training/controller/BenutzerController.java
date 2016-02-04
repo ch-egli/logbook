@@ -29,10 +29,10 @@ public class BenutzerController {
         return new ResponseEntity<Iterable<Benutzer>>(allUsers, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/users/{userId}", method= RequestMethod.GET)
-    public ResponseEntity<?> getUser(@PathVariable Long userId) {
-        this.verifyUser(userId);
-        final Benutzer benutzer = benutzerRepository.findOne(userId);
+    @RequestMapping(value="/users/{benutzername}", method= RequestMethod.GET)
+    public ResponseEntity<?> getUser(@PathVariable String benutzername) {
+        this.verifyUser(benutzername);
+        final Benutzer benutzer = benutzerRepository.findByBenutzername(benutzername);
         return new ResponseEntity<>(benutzer, HttpStatus.OK);
     }
 
@@ -53,25 +53,29 @@ public class BenutzerController {
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value="/users/{userId}", method= RequestMethod.PUT)
-    public ResponseEntity<?> updateUser(@Valid @RequestBody Benutzer benutzer, @PathVariable Long userId) {
-        this.verifyUser(userId);
+    @RequestMapping(value="/users/{benutzername}", method= RequestMethod.PUT)
+    public ResponseEntity<?> updateUser(@Valid @RequestBody Benutzer benutzer, @PathVariable String benutzername) {
+        this.verifyUser(benutzername);
+
+        // only allow updating a user with an benutzername that corresponds to the given benutzername!
+        // otherwise we allow insert operations with PUT...
+        benutzer.setBenutzername(benutzername);
+
         benutzer = benutzerRepository.save(benutzer);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-    @RequestMapping(value="/users/{userId}", method= RequestMethod.DELETE)
-    public ResponseEntity<?> deleteWorkout(@PathVariable Long userId) {
-        this.verifyUser(userId);
-        benutzerRepository.delete(userId);
+    @RequestMapping(value="/users/{benutzername}", method= RequestMethod.DELETE)
+    public ResponseEntity<?> deleteUser(@PathVariable String benutzername) {
+        this.verifyUser(benutzername);
+        benutzerRepository.deleteByBenutzername(benutzername);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    protected void verifyUser(Long userId) throws ResourceNotFoundException {
-        Benutzer benutzer = benutzerRepository.findOne(userId);
+    protected void verifyUser(String benutzername) throws ResourceNotFoundException {
+        Benutzer benutzer = benutzerRepository.findByBenutzername(benutzername);
         if (benutzer == null) {
-            throw new ResourceNotFoundException("User with id " + userId + " not found");
+            throw new ResourceNotFoundException("User '" + benutzername + "' not found");
         }
     }
 }

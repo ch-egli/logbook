@@ -12,7 +12,7 @@ CREATE TABLE benutzer (
 
 CREATE TABLE workout (
   id             SERIAL PRIMARY KEY,
-  benutzer       INT NOT NULL REFERENCES benutzer(id),
+  benutzername   TEXT NOT NULL,
   datum		     DATE NOT NULL,
   ort            TEXT NOT NULL,
   wettkampf      TEXT,

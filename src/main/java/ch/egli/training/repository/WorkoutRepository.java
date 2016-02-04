@@ -12,8 +12,8 @@ import java.util.List;
  */
 public interface WorkoutRepository extends CrudRepository<Workout, Long> {
 
-    public List<Workout> findByBenutzer(String benutzer);
+    public List<Workout> findByBenutzername(String benutzername);
 
-    @Query("select w from Workout w where YEAR(w.datum)=?1 and w.benutzer=?2")
-    public List<Workout> findByYearAndBenutzer(Integer year, Benutzer benutzer);
+    @Query("select w from Workout w where YEAR(w.datum)=?1 and w.benutzername=?2")
+    public List<Workout> findByYearAndBenutzer(Integer year, String benutzername);
 }

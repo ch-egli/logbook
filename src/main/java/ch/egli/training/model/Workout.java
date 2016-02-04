@@ -20,9 +20,9 @@ public class Workout {
     private Long id;
 
     @NotNull
-    @ManyToOne
-    @JoinColumn(name = "benutzer", nullable = false)
-    private Benutzer benutzer;
+    //@ManyToOne
+    //@JoinColumn(name = "benutzer", nullable = false)
+    private String benutzername;
 
     @Column
     @NotNull
@@ -126,12 +126,12 @@ public class Workout {
         this.id = id;
     }
 
-    public Benutzer getBenutzer() {
-        return benutzer;
+    public String getBenutzername() {
+        return benutzername;
     }
 
-    public void setBenutzer(Benutzer benutzer) {
-        this.benutzer = benutzer;
+    public void setBenutzername(String benutzername) {
+        this.benutzername = benutzername;
     }
 
     public Date getDatum() {

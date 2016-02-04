@@ -1,6 +1,7 @@
 package ch.egli.training.controller;
 
 import ch.egli.training.exception.ResourceNotFoundException;
+import ch.egli.training.exception.ResourceNotSavedException;
 import ch.egli.training.model.Workout;
 import ch.egli.training.repository.WorkoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,11 @@ public class WorkoutController {
     @RequestMapping(value="/workouts/{workoutId}", method= RequestMethod.PUT)
     public ResponseEntity<?> updateWorkout(@Valid @RequestBody Workout workout, @PathVariable Long workoutId) {
         this.verifyWorkout(workoutId);
+
+        // only allow updating a workout with an id that corresponds to the given workoutId!
+        // otherwise we allow insert operation with PUT...
+        workout.setId(workoutId);
+
         workout = workoutRepository.save(workout);
         return new ResponseEntity<>(HttpStatus.OK);
     }
