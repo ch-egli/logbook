@@ -1,5 +1,7 @@
 package ch.egli.training.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
@@ -24,6 +26,7 @@ public class Benutzer {
     private String benutzername;
 
     @Column
+    @JsonIgnore
     private String passwort;
 
     @Column
