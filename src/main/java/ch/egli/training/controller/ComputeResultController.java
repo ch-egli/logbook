@@ -31,7 +31,7 @@ import java.util.List;
  */
 @CrossOrigin // allow cross-origin requests for angular frontends...
 @RestController
-@RequestMapping({"/", "/oauth2/"})
+@RequestMapping({"/v1/", "/oauth2/v1/"})
 public class ComputeResultController {
 
     private static final Logger LOGGER = LogManager.getLogger(ComputeResultController.class.getName());

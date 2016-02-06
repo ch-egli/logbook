@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 		.authorizeRequests()
 			.antMatchers("/swagger-ui/**", "/api-docs/**").permitAll()
-			.antMatchers("/users/**").authenticated()
+			.antMatchers("/v1/users/**").authenticated()
 			.and()
 		.httpBasic()
 			.realmName("LogbookRealm")

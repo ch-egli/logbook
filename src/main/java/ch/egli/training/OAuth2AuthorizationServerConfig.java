@@ -25,6 +25,7 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
 		clients
 			.inMemory()
 				.withClient("logbookAngularClient")
+				.accessTokenValiditySeconds(120)     // seconds! -> default is: 44'000 seconds = 12.222 hours !!
 				.secret("myAbcdghij9876Secret")
 				.authorizedGrantTypes("password")
 				.scopes("read", "write")
