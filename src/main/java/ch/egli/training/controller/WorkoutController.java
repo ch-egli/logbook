@@ -22,6 +22,7 @@ import java.net.URI;
  */
 @CrossOrigin // allow cross-origin requests for angular frontends...
 @RestController
+@RequestMapping({"/", "/oauth2/"})
 public class WorkoutController {
 
     @Autowired
