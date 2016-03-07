@@ -23,7 +23,7 @@ import java.net.URI;
  */
 @CrossOrigin // allow cross-origin requests for angular frontends...
 @RestController
-@RequestMapping({"/v1/", "/oauth2/v1/"})
+@RequestMapping({"/v1/"})
 public class BenutzerController {
 
     @Autowired
@@ -74,7 +74,7 @@ public class BenutzerController {
         // otherwise we allow insert operations with PUT...
         benutzer.setBenutzername(benutzername);
 
-        benutzer = benutzerRepository.save(benutzer);
+        benutzerRepository.save(benutzer);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

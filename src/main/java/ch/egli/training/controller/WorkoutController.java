@@ -22,7 +22,7 @@ import java.net.URI;
  */
 @CrossOrigin // allow cross-origin requests for angular frontends...
 @RestController
-@RequestMapping({"/v1/", "/oauth2/v1/"})
+@RequestMapping({"/v1/"})
 public class WorkoutController {
 
     @Autowired
@@ -75,7 +75,7 @@ public class WorkoutController {
         workout.setId(workoutId);
         workout.setBenutzername(benutzername);
 
-        workout = workoutRepository.save(workout);
+        workoutRepository.save(workout);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
