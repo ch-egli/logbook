@@ -10,7 +10,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 @EnableResourceServer
 public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-	@Override
+    @Override
 	public void configure(ResourceServerSecurityConfigurer resources) {
 		resources.resourceId("Logbook_Resources");
 	}

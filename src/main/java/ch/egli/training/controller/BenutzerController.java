@@ -26,6 +26,8 @@ import java.net.URI;
 @RequestMapping({"/v1/"})
 public class BenutzerController {
 
+    private final static String HIDDEN_PASSWORD = "*****";
+
     @Autowired
     BenutzerRepository benutzerRepository;
 
@@ -44,6 +46,17 @@ public class BenutzerController {
     public ResponseEntity<?> getUser(@PathVariable String benutzername) {
         resourceValidator.validateUser(benutzername);
         final Benutzer benutzer = benutzerRepository.findByBenutzername(benutzername);
+        return new ResponseEntity<>(benutzer, HttpStatus.OK);
+    }
+
+    /**
+     * Auxiliary method to get user information without showing the password.
+     */
+    @RequestMapping(value="/usrs/{benutzername}", method= RequestMethod.GET)
+    public ResponseEntity<?> getUserInfo(@PathVariable String benutzername) {
+        resourceValidator.validateUser(benutzername);
+        final Benutzer benutzer = benutzerRepository.findByBenutzername(benutzername);
+        benutzer.setPasswort(HIDDEN_PASSWORD);
         return new ResponseEntity<>(benutzer, HttpStatus.OK);
     }
 
