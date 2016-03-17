@@ -31,6 +31,12 @@ public class WorkoutController {
     @Autowired
     ResourceValidator resourceValidator;
 
+    @RequestMapping(value="/public/lastworkouts", method= RequestMethod.GET)
+    public ResponseEntity<Iterable<Workout>> getLastPublicWorkouts() {
+        final Iterable<Workout> publicWorkouts = workoutRepository.findTop6ByOrderByIdDesc();
+        return new ResponseEntity<Iterable<Workout>>(publicWorkouts, HttpStatus.OK);
+    }
+
     @RequestMapping(value="/users/{benutzername}/workouts", method= RequestMethod.GET)
     public ResponseEntity<Iterable<Workout>> getAllWorkouts(@PathVariable String benutzername) {
         resourceValidator.validateUser(benutzername);

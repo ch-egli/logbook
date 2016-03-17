@@ -20,4 +20,6 @@ public interface WorkoutRepository extends CrudRepository<Workout, Long> {
 
     @Query("select w from Workout w where YEAR(w.datum)=?1 and w.benutzername=?2")
     public List<Workout> findByYearAndBenutzer(Integer year, String benutzername);
+
+    public List<Workout> findTop6ByOrderByIdDesc();
 }
