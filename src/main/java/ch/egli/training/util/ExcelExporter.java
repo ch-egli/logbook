@@ -76,13 +76,18 @@ public class ExcelExporter {
         workoutCellStyle.setBorderRight(CellStyle.BORDER_THIN);
 */
 
+        String currentSheetName = "";
         for (Workout workout : workouts) {
             LocalDate date = workout.getDatum().toLocalDate();
             String sheetName = getSheetNameForDate(date);
             DayOfWeek dayOfWeek = date.getDayOfWeek();
 
             Sheet sheet = workbook.getSheet(sheetName);
-            sheet.protectSheet(null);
+            if (!currentSheetName.equals(sheetName)) {
+                // we cannot unprotect a sheet more than once!
+                sheet.protectSheet(null);
+                currentSheetName = sheetName;
+            }
             Integer column = dayOfWeek.ordinal() + 1;
 
             addTextToCellInRowAtPosition(sheet.getRow(1), column, null, workout.getOrt());
