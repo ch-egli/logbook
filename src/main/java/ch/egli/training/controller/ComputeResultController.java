@@ -77,7 +77,7 @@ public class ComputeResultController {
             InputStream myStream = new ByteArrayInputStream(outputStream.toByteArray());
 
             // Set the content type and attachment header.
-            final String attachmentHeader = "attachment;filename=workouts2015-" + benutzername + ".xlsx";
+            final String attachmentHeader = "attachment;filename=workouts-" + year + "-" + benutzername + ".xlsx";
             response.addHeader("Content-disposition", attachmentHeader);
             response.setContentType("txt/plain");
             response.getOutputStream();
