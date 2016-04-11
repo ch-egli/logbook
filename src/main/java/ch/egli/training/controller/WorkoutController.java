@@ -5,6 +5,9 @@ import ch.egli.training.model.Workout;
 import ch.egli.training.repository.WorkoutRepository;
 import ch.egli.training.util.ResourceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +36,7 @@ public class WorkoutController {
 
     @RequestMapping(value="/public/lastworkouts", method= RequestMethod.GET)
     public ResponseEntity<Iterable<Workout>> getLastPublicWorkouts() {
-        final Iterable<Workout> publicWorkouts = workoutRepository.findTop6ByOrderByIdDesc();
+        final Iterable<Workout> publicWorkouts = workoutRepository.findTop8ByOrderByIdDesc();
         return new ResponseEntity<Iterable<Workout>>(publicWorkouts, HttpStatus.OK);
     }
 
@@ -42,6 +45,15 @@ public class WorkoutController {
         resourceValidator.validateUser(benutzername);
         final Iterable<Workout> allWorkouts = workoutRepository.findByBenutzername(benutzername);
         return new ResponseEntity<Iterable<Workout>>(allWorkouts, HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/users/{benutzername}/workouts/top/{top}", method= RequestMethod.GET)
+    public ResponseEntity<Iterable<Workout>> getAllWorkouts(@PathVariable String benutzername, @PathVariable Integer top) {
+        resourceValidator.validateUser(benutzername);
+        Pageable topPage = new PageRequest(0, top);
+        Page<Workout> page = workoutRepository.findTopByBenutzername(benutzername, topPage);
+        final Iterable<Workout> topWorkouts = page.getContent();
+        return new ResponseEntity<Iterable<Workout>>(topWorkouts, HttpStatus.OK);
     }
 
     @RequestMapping(value="/users/{benutzername}/workouts/{workoutId}", method= RequestMethod.GET)
