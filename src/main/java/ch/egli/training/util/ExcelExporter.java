@@ -91,15 +91,22 @@ public class ExcelExporter {
             Integer column = dayOfWeek.ordinal() + 1;
 
             addTextToCellInRowAtPosition(sheet.getRow(1), column, null, workout.getOrt());
+            addTextToCellInRowAtPosition(sheet.getRow(2), column, null, workout.getWettkampf());
             addNumberToCellInRowAtPosition(sheet.getRow(3), column, null, workout.getSchlaf());
             addNumberToCellInRowAtPosition(sheet.getRow(4), column, null, workout.getGefuehl());
             addNumberToCellInRowAtPosition(sheet.getRow(5), column, null, workout.getLead());
             addNumberToCellInRowAtPosition(sheet.getRow(6), column, null, workout.getBouldern());
+            addNumberToCellInRowAtPosition(sheet.getRow(7), column, null, workout.getCampus());
+            addNumberToCellInRowAtPosition(sheet.getRow(8), column, null, workout.getKraftraum());
+            addNumberToCellInRowAtPosition(sheet.getRow(9), column, null, workout.getDehnen());
+            addNumberToCellInRowAtPosition(sheet.getRow(10), column, null, workout.getMentaltraining());
+            addTextToCellInRowAtPosition(sheet.getRow(11), column, null, workout.getGeraete());
             addNumberToCellInRowAtPosition(sheet.getRow(18), column, null, workout.getBelastung());
             addNumberToCellInRowAtPosition(sheet.getRow(19), column, null, workout.getZuege12());
             addNumberToCellInRowAtPosition(sheet.getRow(20), column, null, workout.getZuege23());
             addNumberToCellInRowAtPosition(sheet.getRow(21), column, null, workout.getZuege34());
             addNumberToCellInRowAtPosition(sheet.getRow(23), column, null, workout.getTrainingszeit());
+            addTextToCellInRowAtPosition(sheet.getRow(24), column, null, workout.getSonstiges());
         }
 
         // Re-evaluate all formulas of the workbook
