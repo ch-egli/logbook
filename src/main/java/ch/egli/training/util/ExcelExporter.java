@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Class providing methods to export workout date to an Excel file.
+ * Class providing methods to export workout data to an Excel file.
  *
  * @author Christian Egli
  * @since 1/31/16.

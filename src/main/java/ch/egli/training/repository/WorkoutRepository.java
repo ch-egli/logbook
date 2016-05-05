@@ -3,8 +3,10 @@ package ch.egli.training.repository;
 import ch.egli.training.model.Workout;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,6 +27,11 @@ public interface WorkoutRepository extends CrudRepository<Workout, Long> {
 
     @Query("select w from Workout w where YEAR(w.datum)=?1 and w.benutzername=?2")
     public List<Workout> findByYearAndBenutzer(Integer year, String benutzername);
+
+    @Modifying
+    @Transactional
+    @Query("delete from Workout w where YEAR(w.datum)=?1 and w.benutzername=?2")
+    public void deleteByYearAndBenutzer(Integer year, String benutzername);
 
     public List<Workout> findTop8ByOrderByIdDesc();
 }

@@ -1,13 +1,14 @@
 package ch.egli.training.util;
 
 /**
- * TODO: Describe
+ * Class providing methods to import workout data from an Excel file.
  *
  * @author Christian Egli
  * @since 5/2/16.
  */
 
 import ch.egli.training.model.Workout;
+import ch.egli.training.repository.WorkoutRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -15,6 +16,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -29,13 +31,25 @@ public class ExcelImporter {
 
     private static final Logger LOGGER = LogManager.getLogger(ExcelImporter.class.getName());
 
+    @Autowired
+    private WorkoutRepository workoutRepository;
+
+    /**
+     * Import the workouts for a given year and user.
+     * Note: A valid workout must either have a Trainingszeit or a valid Schlaf-entry!
+     *
+     * Attention: Any already existing workouts for this year and user will deleted!
+     */
     public void importWorkoutData(final InputStream is, final int year, final String username) throws IOException, InvalidFormatException {
         final List<Workout> workouts = getWorkoutsFromExcel(is, year, username);
 
-        // TODO: delete existing workouts for current person and current year...
+        // delete existing workouts for current person and year...
+        workoutRepository.deleteByYearAndBenutzer(year, username);
 
-        // TODO: insert new workouts for current person and current year...
-
+        // insert new workouts for current person and year...
+        for (Workout w : workouts) {
+            workoutRepository.save(w);
+        }
         LOGGER.debug("import successfully completed!");
     }
 
