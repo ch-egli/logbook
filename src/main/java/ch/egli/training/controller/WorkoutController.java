@@ -36,7 +36,7 @@ public class WorkoutController {
 
     @RequestMapping(value="/public/lastworkouts", method= RequestMethod.GET)
     public ResponseEntity<Iterable<Workout>> getLastPublicWorkouts() {
-        final Iterable<Workout> publicWorkouts = workoutRepository.findTop8ByOrderByIdDesc();
+        final Iterable<Workout> publicWorkouts = workoutRepository.findTop8ByOrderByDatumDesc();
         return new ResponseEntity<Iterable<Workout>>(publicWorkouts, HttpStatus.OK);
     }
 

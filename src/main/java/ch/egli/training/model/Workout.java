@@ -32,7 +32,6 @@ public class Workout {
     private Date datum;
 
     @Column
-    @NotNull
     private String ort;
 
     @Column

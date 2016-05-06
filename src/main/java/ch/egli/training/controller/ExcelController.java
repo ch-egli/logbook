@@ -2,6 +2,8 @@ package ch.egli.training.controller;
 
 import ch.egli.training.LogbookApplication;
 import ch.egli.training.util.ExcelImporter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +28,8 @@ import java.util.stream.Collectors;
  */
 @Controller
 public class ExcelController {
+
+    private static final Logger LOGGER = LogManager.getLogger(ExcelController.class.getName());
 
     @Autowired
     private ExcelImporter excelImporter;
@@ -67,8 +71,9 @@ public class ExcelController {
                 inputStream = file.getInputStream();
                 excelImporter.importWorkoutData(inputStream, year, name);
             }
-            catch (Exception e) {
-                redirectAttributes.addFlashAttribute("message", "Upload failed: " + e.getMessage());
+            catch (Exception ex) {
+                LOGGER.error("unexpected exception during export to Excel: ", ex);
+                redirectAttributes.addFlashAttribute("message", "Upload failed: " + ex.getMessage());
             }
         }
         else {

@@ -71,8 +71,7 @@ public class ComputeResultController {
             LOGGER.warn("No workouts for year '{}' and user '{}' found", year, benutzername);
         }
 
-        final Resource resource = new ClassPathResource("workouts.xlsx");
-        try (InputStream inputStream = resource.getInputStream()) {
+        try {
             ByteArrayOutputStream outputStream = (ByteArrayOutputStream) excelExporter.exportAllWorkouts(userWorkouts);
             InputStream myStream = new ByteArrayInputStream(outputStream.toByteArray());
 
@@ -87,6 +86,7 @@ public class ComputeResultController {
             response.flushBuffer();
 
         } catch (Exception ex) {
+            LOGGER.error("unexpected exception during export to Excel: ", ex);
             throw new InternalServerException("unexpected exception during export to Excel: ", ex);
         }
 

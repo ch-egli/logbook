@@ -40,7 +40,7 @@ public class ExcelExporter {
     public OutputStream exportAllWorkouts(List<Workout> workouts) {
 
         OutputStream outputStream = null;
-        Resource resource = new ClassPathResource("workouts.xlsx");
+        Resource resource = new ClassPathResource("Vorlage2016.xlsx");
         try (InputStream inputStream = resource.getInputStream()) {
             outputStream = exportToExcel(inputStream, workouts);
         } catch (Exception ex) {
@@ -85,7 +85,11 @@ public class ExcelExporter {
             Sheet sheet = workbook.getSheet(sheetName);
             if (!currentSheetName.equals(sheetName)) {
                 // we cannot unprotect a sheet more than once!
-                sheet.protectSheet(null);
+                try {
+                    sheet.protectSheet(null);
+                } catch (Exception ex) {
+                    LOGGER.info("unprotecting sheet " + sheet.getSheetName() + " has failed.");
+                }
                 currentSheetName = sheetName;
             }
             Integer column = dayOfWeek.ordinal() + 1;

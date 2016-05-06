@@ -14,7 +14,7 @@ CREATE TABLE workout (
   id             SERIAL PRIMARY KEY,
   benutzername   TEXT NOT NULL,
   datum		     DATE NOT NULL,
-  ort            TEXT NOT NULL,
+  ort            TEXT,
   wettkampf      TEXT,
   schlaf         INT,
   gefuehl        INT,

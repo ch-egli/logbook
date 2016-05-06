@@ -71,14 +71,28 @@ public class ExcelImporter {
             final Sheet sheet = workbook.getSheetAt(sheetId);
             for (int col = 1; col <= 7; col++) { // monday = 1, tuesday = 2, ...
                 final Workout w = createWorkout(sheet, col, year, username);
-                if ((w.getTrainingszeit() != null) || (w.getSchlaf() != null)) {
-                    // only add workouts that contain either a Trainingszeit or Schlaf value
+                if (hasData(w)) {
+                    // only add workouts that contain data
                     workouts.add(w);
                 }
             }
         }
 
         return workouts;
+    }
+
+    /**
+     * A valid workout must have either Trainingszeit and -ort or a Bemerkung/Sonstiges
+     */
+    private boolean hasData(final Workout workout) {
+        if (workout.getTrainingszeit() != null) {
+            return true;
+        } else if (workout.getSonstiges() != null) {
+            return true;
+        } else if (workout.getOrt() != null) {
+            return true;
+        }
+        return false;
     }
 
     private Workout createWorkout(Sheet sheet, int col, int year, String username) {
