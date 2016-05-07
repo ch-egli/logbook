@@ -64,6 +64,13 @@ public class WorkoutController {
         return new ResponseEntity<>(workout, HttpStatus.OK);
     }
 
+    @RequestMapping(value="/users/all/workouts/{workoutId}", method= RequestMethod.GET)
+    public ResponseEntity<?> getWorkout(@PathVariable Long workoutId) {
+        resourceValidator.validateWorkout(workoutId);
+        final Workout workout = workoutRepository.findById(workoutId);
+        return new ResponseEntity<>(workout, HttpStatus.OK);
+    }
+
     @RequestMapping(value="/users/{benutzername}/workouts", method= RequestMethod.POST)
     public ResponseEntity<?> createWorkout(@PathVariable String benutzername, @Valid @RequestBody Workout workout) {
         resourceValidator.validateUser(benutzername);

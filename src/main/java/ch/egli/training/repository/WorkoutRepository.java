@@ -24,6 +24,8 @@ public interface WorkoutRepository extends CrudRepository<Workout, Long> {
     @Query("select w from Workout w where w.benutzername=?1 ORDER BY w.datum DESC")
     public Page<Workout> findTopByBenutzername(String benutzername, Pageable pageable);
 
+    public Workout findById(Long workoutId);
+
     public Workout findByBenutzernameAndId(String benutzername, Long workoutId);
 
     @Query("select w from Workout w where YEAR(w.datum)=?1 and w.benutzername=?2")
