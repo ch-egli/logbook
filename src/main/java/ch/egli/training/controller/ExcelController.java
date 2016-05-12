@@ -21,10 +21,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * TODO: Describe
+ * Spring MVC Controller for importing Excel Files
+ * Context: "/"
+ * Is only thought for local usage, so comment this class before adding to production!
  *
  * @author Christian Egli
- * @since 5/2/16.
+ * @since 5/5/16.
  */
 @Controller
 public class ExcelController {

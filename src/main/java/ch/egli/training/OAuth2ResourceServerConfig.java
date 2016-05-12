@@ -17,7 +17,10 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
 	
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-        http
+        http.headers()
+				.frameOptions()  // Set X-Frame-Options in order to open iFrame to download an Excel file...
+				.disable()
+				.and()
             .requestMatchers()
                 .antMatchers("/v1/**")
                 .and()
