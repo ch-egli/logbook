@@ -31,8 +31,13 @@ import java.net.URI;
 @RequestMapping({"/v1/"})
 public class WorkoutController {
 
+    private final static String PAGING_INFO = "PAGING_INFO";
+
     private final static String USERS_ALL = "all";
     private final static String GROUP_EGLI_SISTERS = "groupEgliSisters";
+    private final static String GROUP_EGLI_SISTERS__NAME_1 = "zoe";
+    private final static String GROUP_EGLI_SISTERS__NAME_2 = "liv";
+
 
     // Sorting of workouts is done by datum DESC
     private Sort workoutSort = new Sort(Sort.Direction.DESC, "datum");
@@ -50,35 +55,52 @@ public class WorkoutController {
     }
 
     @RequestMapping(value="/users/{benutzername}/workouts", method= RequestMethod.GET)
-    public ResponseEntity<Iterable<Workout>> getAllWorkouts(@PathVariable String benutzername,
+    public ResponseEntity<Iterable<Workout>> getWorkouts(@PathVariable String benutzername,
             @RequestParam(value = "page", required = false, defaultValue = "0") final int page,
             @RequestParam(value = "size", required = false, defaultValue = "8") final int size,
             HttpServletResponse response) {
 
         if (USERS_ALL.equalsIgnoreCase(benutzername)) {
-            final PagingInfo pagingInfo = new PagingInfo(page, size, workoutRepository.count());
-            response.addHeader("PAGING_INFO", pagingInfo.toString());
-
-            final Iterable<Workout> allWorkouts = workoutRepository.findAll(new PageRequest(page, size, workoutSort));
-            return new ResponseEntity<Iterable<Workout>>(allWorkouts, HttpStatus.OK);
+            // return all workouts of all users
+            return getAllWorkouts(page, size, response);
 
         } else if (GROUP_EGLI_SISTERS.equalsIgnoreCase(benutzername)) {
-            final PagingInfo pagingInfo = new PagingInfo(page, size, workoutRepository.countAllWorkoutsOfGivenUsers("zoe", "liv"));
-            response.addHeader("PAGING_INFO", pagingInfo.toString());
-
-            final Iterable<Workout> allWorkouts = workoutRepository.findAllWorkoutsOfGivenUsers("zoe", "liv", new PageRequest(page, size, workoutSort));
-            return new ResponseEntity<Iterable<Workout>>(allWorkouts, HttpStatus.OK);
+            // return the workouts of the Egli sisters
+            return  getEgliSistersWorkouts(page, size, response);
 
         } else {
-            resourceValidator.validateUser(benutzername);
-
-            final PagingInfo pagingInfo = new PagingInfo(page, size, workoutRepository.countByBenutzername(benutzername));
-            response.addHeader("PAGING_INFO", pagingInfo.toString());
-
-            final Iterable<Workout> allWorkouts = workoutRepository.findByBenutzername(benutzername, new PageRequest(page, size, workoutSort));
-            return new ResponseEntity<Iterable<Workout>>(allWorkouts, HttpStatus.OK);
+            // return all workouts of a given user
+            return getUsersWorkouts(benutzername, page, size, response);
         }
     }
+
+    private ResponseEntity<Iterable<Workout>> getAllWorkouts(int page, int size, HttpServletResponse response) {
+        final PagingInfo pagingInfo = new PagingInfo(page, size, workoutRepository.count());
+        response.addHeader(PAGING_INFO, pagingInfo.toString());
+
+        final Iterable<Workout> allWorkouts = workoutRepository.findAll(new PageRequest(page, size, workoutSort));
+        return new ResponseEntity<Iterable<Workout>>(allWorkouts, HttpStatus.OK);
+    }
+
+    private ResponseEntity<Iterable<Workout>> getEgliSistersWorkouts(int page, int size, HttpServletResponse response) {
+        final PagingInfo pagingInfo = new PagingInfo(page, size, workoutRepository.countAllWorkoutsOfGivenUsers(GROUP_EGLI_SISTERS__NAME_1, GROUP_EGLI_SISTERS__NAME_2));
+        response.addHeader(PAGING_INFO, pagingInfo.toString());
+
+        final Iterable<Workout> allWorkouts = workoutRepository.findAllWorkoutsOfGivenUsers(GROUP_EGLI_SISTERS__NAME_1, GROUP_EGLI_SISTERS__NAME_2,
+                new PageRequest(page, size, workoutSort));
+        return new ResponseEntity<Iterable<Workout>>(allWorkouts, HttpStatus.OK);
+    }
+
+    private ResponseEntity<Iterable<Workout>> getUsersWorkouts(String benutzername, int page, int size, HttpServletResponse response) {
+        resourceValidator.validateUser(benutzername);
+
+        final PagingInfo pagingInfo = new PagingInfo(page, size, workoutRepository.countByBenutzername(benutzername));
+        response.addHeader(PAGING_INFO, pagingInfo.toString());
+
+        final Iterable<Workout> allWorkouts = workoutRepository.findByBenutzername(benutzername, new PageRequest(page, size, workoutSort));
+        return new ResponseEntity<Iterable<Workout>>(allWorkouts, HttpStatus.OK);
+    }
+
 
     @RequestMapping(value="/users/{benutzername}/workouts/top/{top}", method= RequestMethod.GET)
     public ResponseEntity<Iterable<Workout>> getAllWorkouts(@PathVariable String benutzername, @PathVariable Integer top) {
@@ -89,6 +111,7 @@ public class WorkoutController {
         return new ResponseEntity<Iterable<Workout>>(topWorkouts, HttpStatus.OK);
     }
 
+
     @RequestMapping(value="/users/{benutzername}/workouts/{workoutId}", method= RequestMethod.GET)
     public ResponseEntity<?> getWorkout(@PathVariable String benutzername, @PathVariable Long workoutId) {
         resourceValidator.validateUser(benutzername);
@@ -97,12 +120,14 @@ public class WorkoutController {
         return new ResponseEntity<>(workout, HttpStatus.OK);
     }
 
+
     @RequestMapping(value="/users/all/workouts/{workoutId}", method= RequestMethod.GET)
     public ResponseEntity<?> getWorkout(@PathVariable Long workoutId) {
         resourceValidator.validateWorkout(workoutId);
         final Workout workout = workoutRepository.findById(workoutId);
         return new ResponseEntity<>(workout, HttpStatus.OK);
     }
+
 
     @RequestMapping(value="/users/{benutzername}/workouts", method= RequestMethod.POST)
     public ResponseEntity<?> createWorkout(@PathVariable String benutzername, @Valid @RequestBody Workout workout) {
@@ -123,6 +148,7 @@ public class WorkoutController {
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
 
+
     @RequestMapping(value="/users/{benutzername}/workouts/{workoutId}", method= RequestMethod.PUT)
     public ResponseEntity<?> updateWorkout(@RequestBody Workout workout, @PathVariable String benutzername, @PathVariable Long workoutId) {
         resourceValidator.validateUser(benutzername);
@@ -136,6 +162,7 @@ public class WorkoutController {
         workoutRepository.save(workout);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @RequestMapping(value="/users/{benutzername}/workouts/{workoutId}", method= RequestMethod.DELETE)
     public ResponseEntity<?> deleteWorkout(@PathVariable String benutzername, @PathVariable Long workoutId) {
