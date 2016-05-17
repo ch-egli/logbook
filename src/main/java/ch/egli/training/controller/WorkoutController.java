@@ -3,17 +3,20 @@ package ch.egli.training.controller;
 import ch.egli.training.exception.BadRequestException;
 import ch.egli.training.model.Workout;
 import ch.egli.training.repository.WorkoutRepository;
+import ch.egli.training.util.PagingInfo;
 import ch.egli.training.util.ResourceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
 
@@ -28,6 +31,12 @@ import java.net.URI;
 @RequestMapping({"/v1/"})
 public class WorkoutController {
 
+    private final static String USERS_ALL = "all";
+    private final static String GROUP_EGLI_SISTERS = "groupEgliSisters";
+
+    // Sorting of workouts is done by datum DESC
+    private Sort workoutSort = new Sort(Sort.Direction.DESC, "datum");
+
     @Autowired
     private WorkoutRepository workoutRepository;
 
@@ -41,10 +50,34 @@ public class WorkoutController {
     }
 
     @RequestMapping(value="/users/{benutzername}/workouts", method= RequestMethod.GET)
-    public ResponseEntity<Iterable<Workout>> getAllWorkouts(@PathVariable String benutzername) {
-        resourceValidator.validateUser(benutzername);
-        final Iterable<Workout> allWorkouts = workoutRepository.findByBenutzername(benutzername);
-        return new ResponseEntity<Iterable<Workout>>(allWorkouts, HttpStatus.OK);
+    public ResponseEntity<Iterable<Workout>> getAllWorkouts(@PathVariable String benutzername,
+            @RequestParam(value = "page", required = false, defaultValue = "0") final int page,
+            @RequestParam(value = "size", required = false, defaultValue = "8") final int size,
+            HttpServletResponse response) {
+
+        if (USERS_ALL.equalsIgnoreCase(benutzername)) {
+            final PagingInfo pagingInfo = new PagingInfo(page, size, workoutRepository.count());
+            response.addHeader("PAGING_INFO", pagingInfo.toString());
+
+            final Iterable<Workout> allWorkouts = workoutRepository.findAll(new PageRequest(page, size, workoutSort));
+            return new ResponseEntity<Iterable<Workout>>(allWorkouts, HttpStatus.OK);
+
+        } else if (GROUP_EGLI_SISTERS.equalsIgnoreCase(benutzername)) {
+            final PagingInfo pagingInfo = new PagingInfo(page, size, workoutRepository.countAllWorkoutsOfGivenUsers("zoe", "liv"));
+            response.addHeader("PAGING_INFO", pagingInfo.toString());
+
+            final Iterable<Workout> allWorkouts = workoutRepository.findAllWorkoutsOfGivenUsers("zoe", "liv", new PageRequest(page, size, workoutSort));
+            return new ResponseEntity<Iterable<Workout>>(allWorkouts, HttpStatus.OK);
+
+        } else {
+            resourceValidator.validateUser(benutzername);
+
+            final PagingInfo pagingInfo = new PagingInfo(page, size, workoutRepository.countByBenutzername(benutzername));
+            response.addHeader("PAGING_INFO", pagingInfo.toString());
+
+            final Iterable<Workout> allWorkouts = workoutRepository.findByBenutzername(benutzername, new PageRequest(page, size, workoutSort));
+            return new ResponseEntity<Iterable<Workout>>(allWorkouts, HttpStatus.OK);
+        }
     }
 
     @RequestMapping(value="/users/{benutzername}/workouts/top/{top}", method= RequestMethod.GET)
