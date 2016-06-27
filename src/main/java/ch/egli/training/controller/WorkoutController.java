@@ -1,10 +1,14 @@
 package ch.egli.training.controller;
 
 import ch.egli.training.exception.BadRequestException;
+import ch.egli.training.model.Status;
 import ch.egli.training.model.Workout;
+import ch.egli.training.repository.StatusRepository;
 import ch.egli.training.repository.WorkoutRepository;
 import ch.egli.training.util.PagingInfo;
 import ch.egli.training.util.ResourceValidator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 /**
  * REST controller for accessing workouts/training units.
@@ -31,13 +36,14 @@ import java.net.URI;
 @RequestMapping({"/v1/"})
 public class WorkoutController {
 
+    private static final Logger LOGGER = LogManager.getLogger(WorkoutController.class.getName());
+
     private final static String PAGING_INFO = "PAGING_INFO";
 
     private final static String USERS_ALL = "all";
     private final static String GROUP_EGLI_SISTERS = "groupEgliSisters";
     private final static String GROUP_EGLI_SISTERS__NAME_1 = "zoe";
     private final static String GROUP_EGLI_SISTERS__NAME_2 = "liv";
-
 
     // Sorting of workouts is done by datum DESC
     private Sort workoutSort = new Sort(Sort.Direction.DESC, "datum");
@@ -47,6 +53,32 @@ public class WorkoutController {
 
     @Autowired
     ResourceValidator resourceValidator;
+
+    /**
+     * Just to transfer the current gefühl and schlaf values from workout to status table...
+     * TODO: comment out!!
+     */
+    @Autowired
+    private StatusRepository statusRepository;
+    @RequestMapping(value="/public/transfer", method= RequestMethod.GET)
+    public void moveFromWorkoutToStatus() {
+        List<Workout> workouts = workoutRepository.findAll();
+        for (Workout wo : workouts) {
+            final Status status = new Status();
+            status.setDatum(wo.getDatum());
+            status.setBenutzername(wo.getBenutzername());
+
+            if (wo.getSchlaf() != null) {
+                status.setSchlaf(wo.getSchlaf().floatValue());
+            }
+
+            if (wo.getGefuehl() != null) {
+                status.setGefuehl(wo.getGefuehl().floatValue());
+            }
+            statusRepository.save(status);
+        }
+        LOGGER.debug("entries copied: " + workouts.size());
+    }
 
     @RequestMapping(value="/public/lastworkouts", method= RequestMethod.GET)
     public ResponseEntity<Iterable<Workout>> getLastPublicWorkouts() {

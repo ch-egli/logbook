@@ -39,3 +39,12 @@ CREATE TABLE workout (
   trainingszeit  INT,
   sonstiges      TEXT
 );
+
+CREATE TABLE status (
+  id             SERIAL PRIMARY KEY,
+  benutzername   TEXT NOT NULL,
+  datum		     DATE NOT NULL,
+  schlaf         NUMERIC(3,1),
+  gefuehl        NUMERIC(3,1),
+  bemerkung      TEXT
+);

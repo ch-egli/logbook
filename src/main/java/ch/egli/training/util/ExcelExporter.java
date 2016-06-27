@@ -1,5 +1,6 @@
 package ch.egli.training.util;
 
+import ch.egli.training.model.Status;
 import ch.egli.training.model.Workout;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +21,8 @@ import java.time.temporal.WeekFields;
 import java.util.List;
 import java.util.Locale;
 
+import static org.springframework.util.StringUtils.hasLength;
+
 /**
  * Class providing methods to export workout data to an Excel file.
  *
@@ -37,12 +40,12 @@ public class ExcelExporter {
      * @param workouts list of workouts for a given person
      * @return output stream of Excel workbook containing workout entries
      */
-    public OutputStream exportAllWorkouts(List<Workout> workouts) {
+    public OutputStream exportAllWorkouts(List<Workout> workouts, List<Status> states) {
 
         OutputStream outputStream = null;
         Resource resource = new ClassPathResource("Vorlage2016.xlsx");
         try (InputStream inputStream = resource.getInputStream()) {
-            outputStream = exportToExcel(inputStream, workouts);
+            outputStream = exportToExcel(inputStream, workouts, states);
         } catch (Exception ex) {
             LOGGER.error("Error during Excel export: ", ex);
         }
@@ -56,11 +59,12 @@ public class ExcelExporter {
      *
      * @param is input stream containing workbook
      * @param workouts list of workouts
+     * @param states list of statuses
      * @return output stream of workbook containing workout entries
      * @throws IOException
      * @throws InvalidFormatException
      */
-    private OutputStream exportToExcel(@NotNull final InputStream is, List<Workout> workouts) throws IOException, InvalidFormatException {
+    private OutputStream exportToExcel(@NotNull final InputStream is, List<Workout> workouts, List<Status> states) throws IOException, InvalidFormatException {
 
         final Workbook workbook = WorkbookFactory.create(is);
         is.close();
@@ -96,21 +100,42 @@ public class ExcelExporter {
 
             addTextToCellInRowAtPosition(sheet.getRow(1), column, null, workout.getOrt());
             addTextToCellInRowAtPosition(sheet.getRow(2), column, null, workout.getWettkampf());
-            addNumberToCellInRowAtPosition(sheet.getRow(3), column, null, workout.getSchlaf());
-            addNumberToCellInRowAtPosition(sheet.getRow(4), column, null, workout.getGefuehl());
-            addNumberToCellInRowAtPosition(sheet.getRow(5), column, null, workout.getLead());
-            addNumberToCellInRowAtPosition(sheet.getRow(6), column, null, workout.getBouldern());
-            addNumberToCellInRowAtPosition(sheet.getRow(7), column, null, workout.getCampus());
-            addNumberToCellInRowAtPosition(sheet.getRow(8), column, null, workout.getKraftraum());
-            addNumberToCellInRowAtPosition(sheet.getRow(9), column, null, workout.getDehnen());
-            addNumberToCellInRowAtPosition(sheet.getRow(10), column, null, workout.getMentaltraining());
+            addIntegerToCellInRowAtPosition(sheet.getRow(5), column, null, workout.getLead());
+            addIntegerToCellInRowAtPosition(sheet.getRow(6), column, null, workout.getBouldern());
+            addIntegerToCellInRowAtPosition(sheet.getRow(7), column, null, workout.getCampus());
+            addIntegerToCellInRowAtPosition(sheet.getRow(8), column, null, workout.getKraftraum());
+            addIntegerToCellInRowAtPosition(sheet.getRow(9), column, null, workout.getDehnen());
+            addIntegerToCellInRowAtPosition(sheet.getRow(10), column, null, workout.getMentaltraining());
             addTextToCellInRowAtPosition(sheet.getRow(11), column, null, workout.getGeraete());
-            addNumberToCellInRowAtPosition(sheet.getRow(18), column, null, workout.getBelastung());
-            addNumberToCellInRowAtPosition(sheet.getRow(19), column, null, workout.getZuege12());
-            addNumberToCellInRowAtPosition(sheet.getRow(20), column, null, workout.getZuege23());
-            addNumberToCellInRowAtPosition(sheet.getRow(21), column, null, workout.getZuege34());
-            addNumberToCellInRowAtPosition(sheet.getRow(23), column, null, workout.getTrainingszeit());
+            addIntegerToCellInRowAtPosition(sheet.getRow(18), column, null, workout.getBelastung());
+            addIntegerToCellInRowAtPosition(sheet.getRow(19), column, null, workout.getZuege12());
+            addIntegerToCellInRowAtPosition(sheet.getRow(20), column, null, workout.getZuege23());
+            addIntegerToCellInRowAtPosition(sheet.getRow(21), column, null, workout.getZuege34());
+            addIntegerToCellInRowAtPosition(sheet.getRow(23), column, null, workout.getTrainingszeit());
             addTextToCellInRowAtPosition(sheet.getRow(24), column, null, workout.getSonstiges());
+        }
+
+        currentSheetName = "";
+        for (Status state : states) {
+            LocalDate date = state.getDatum().toLocalDate();
+            String sheetName = getSheetNameForDate(date);
+            DayOfWeek dayOfWeek = date.getDayOfWeek();
+
+            Sheet sheet = workbook.getSheet(sheetName);
+            if (!currentSheetName.equals(sheetName)) {
+                // we cannot unprotect a sheet more than once!
+                try {
+                    sheet.protectSheet(null);
+                } catch (Exception ex) {
+                    LOGGER.info("unprotecting sheet " + sheet.getSheetName() + " has failed.");
+                }
+                currentSheetName = sheetName;
+            }
+            Integer column = dayOfWeek.ordinal() + 1;
+
+            addNumberToCellInRowAtPosition(sheet.getRow(3), column, null, state.getSchlaf());
+            addNumberToCellInRowAtPosition(sheet.getRow(4), column, null, state.getGefuehl());
+            addTextToCellInRowAtPosition(sheet.getRow(24), column, null, state.getBemerkung());
         }
 
         // Re-evaluate all formulas of the workbook
@@ -148,7 +173,12 @@ public class ExcelExporter {
      */
     private static void addTextToCellInRowAtPosition(final Row row, final int pos, final CellStyle cellStyle, final String text) {
         final Cell cell = row.getCell(pos);
-        cell.setCellValue(text);
+        final String existingText = cell.getStringCellValue();
+        if (hasLength(existingText)) {
+            cell.setCellValue(existingText + "; " + text);
+        } else {
+            cell.setCellValue(text);
+        }
         if (cellStyle != null) {
             cell.setCellStyle(cellStyle);
         }
@@ -162,7 +192,25 @@ public class ExcelExporter {
      * @param cellStyle style to apply (ignored if null)
      * @param val numeric value to insert
      */
-    private static void addNumberToCellInRowAtPosition(final Row row, final int pos, final CellStyle cellStyle, final Integer val) {
+    private static void addNumberToCellInRowAtPosition(final Row row, final int pos, final CellStyle cellStyle, final Float val) {
+        if (val != null) {
+            final Cell cell = row.getCell(pos);
+            cell.setCellValue(val);
+            if (cellStyle != null) {
+                cell.setCellStyle(cellStyle);
+            }
+        }
+    }
+
+    /**
+     * Create a numeric cell in the row at the given position.
+     *
+     * @param row row where cell is inserted
+     * @param pos position (starting at 0)
+     * @param cellStyle style to apply (ignored if null)
+     * @param val numeric value to insert
+     */
+    private static void addIntegerToCellInRowAtPosition(final Row row, final int pos, final CellStyle cellStyle, final Integer val) {
         if (val != null) {
             final Cell cell = row.getCell(pos);
             cell.setCellValue(val);
