@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Date;
 
 /**
  * REST controller for accessing status units.
@@ -94,6 +96,14 @@ public class StatusController {
     public ResponseEntity<?> getStatus(@PathVariable String benutzername, @PathVariable Long statusId) {
         resourceValidator.validateUser(benutzername);
         final Status status = statusRepository.findByBenutzernameAndId(benutzername, statusId);
+        return new ResponseEntity<>(status, HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value="/users/{benutzername}/status/datum/{date}", method= RequestMethod.GET)
+    public ResponseEntity<?> getStatusByDate(@PathVariable String benutzername, @PathVariable @DateTimeFormat(pattern="yyyy-MM-dd") Date date) {
+        resourceValidator.validateUser(benutzername);
+        final Status status = statusRepository.findByBenutzernameAndDatum(benutzername, new java.sql.Date(date.getTime()));
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
 
