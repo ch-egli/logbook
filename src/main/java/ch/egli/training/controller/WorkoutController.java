@@ -58,6 +58,7 @@ public class WorkoutController {
      * Just to transfer the current gefühl and schlaf values from workout to status table...
      * TODO: comment out!!
      */
+/*
     @Autowired
     private StatusRepository statusRepository;
     @RequestMapping(value="/public/transfer", method= RequestMethod.GET)
@@ -79,6 +80,7 @@ public class WorkoutController {
         }
         LOGGER.debug("entries copied: " + workouts.size());
     }
+*/
 
     @RequestMapping(value="/public/lastworkouts", method= RequestMethod.GET)
     public ResponseEntity<Iterable<Workout>> getLastPublicWorkouts() {
