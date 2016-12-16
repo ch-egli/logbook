@@ -1,0 +1,162 @@
+<navbar xmlns="http://www.w3.org/1999/html"></navbar>
+<main>
+    <style>
+        .full button span {
+            background-color: limegreen;
+            border-radius: 32px;
+            color: black;
+        }
+        .partially button span {
+            background-color: orange;
+            border-radius: 32px;
+            color: black;
+        }
+        .gefuehlEmoji {
+            margin-left: 5px;
+            margin-right: 5px;
+            width: 34px;
+            height: 34px;
+        }
+        .gefuehlEmojiFirst {
+            margin-left: 10px;
+            margin-right: 5px;
+            width: 34px;
+            height: 34px;
+        }
+        .emoji-group {
+            margin-top: 2px;
+            margin-bottom: 8px;
+            white-space: nowrap;
+        }
+    </style>
+    <div class="container">
+        <div class="jumbotron">
+            <div>
+                <h1>
+                    <small>{{ $ctrl.title }}</small>
+                </h1>
+            </div>
+        </div>
+        <div class="container">
+            <section ng-hide="$ctrl.username">
+                <div class="alert alert-warning" role="alert">
+                    <strong>Warning!</strong> Bitte logge dich ein, bevor du eine neue Einheit erfasst!
+                </div>
+            </section>
+
+            <form name="$ctrl.workoutForm">
+
+                <div class="form-group">
+                    <label for="datum">Datum</label>
+                    <p class="input-group">
+                        <input type="text"
+                               class="form-control"
+                               uib-datepicker-popup="dd.MM.yyyy"
+                               id="datum"
+                               ng-model="$ctrl.datum"
+                               is-open="$ctrl.popup1.opened"
+                               datepicker-options="dateOptions"
+                               ng-required="true"
+                               ng-change="$ctrl.onDateChange()"
+                               close-text="Schliessen"/>
+                    <span class="input-group-btn">
+                        <button type="button"
+                                class="btn btn-default"
+                                ng-click="$ctrl.open1()">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                    </span>
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label for="ort1">Ort</label>
+                    <select class="form-control" id="ort1" ng-model="$ctrl.ort1" ng-options="item for item in $ctrl.workoutLocations"/>
+                    <input type="text" class="form-control" id="ort2" ng-show="$ctrl.ort1 === 'Anderer Ort:'" ng-model="$ctrl.ort2">
+                </div>
+                <div class="checkbox">
+                    <label style="padding-right:10px;"><input id="lead" type="checkbox" ng-model="$ctrl.lead"> Lead</label>
+                    <label style="padding-right:10px;"><input id="bouldern" type="checkbox" ng-model="$ctrl.bouldern"> Bouldern</label>
+                    <label style="padding-right:10px;"><input id="kraftraum" type="checkbox" ng-model="$ctrl.kraftraum"> Kraftraum</label>
+                    <label style="padding-right:10px;"><input id="dehnen" type="checkbox" ng-model="$ctrl.dehnen"> Dehnen</label>
+                    <label style="padding-right:10px;"><input id="campus" type="checkbox" ng-model="$ctrl.campus"> Campus</label>
+                    <label style="padding-right:10px;"><input id="mentaltraining" type="checkbox" ng-model="$ctrl.mentaltraining"> Mentaltraining</label>
+<!--
+                    <label style="padding-right:10px;"><input id="geraete" type="checkbox" ng-model="$ctrl.geraete"> Geräte</label>
+-->
+                </div>
+                <div class="form-group">
+                    <label for="trainingszeit">Dauer (Minuten)</label>
+                    <input type="number" class="form-control" id="trainingszeit" ng-model="$ctrl.trainingszeit">
+                </div>
+                <div class="form-group">
+                    <label for="belastung">Belastung (6-20)</label>&nbsp;&nbsp;<a ng-click="$ctrl.showInfo()" title="Info"><span class="glyphicon glyphicon-info-sign"></span></a>
+                    <select class="form-control" id="belastung" ng-model="$ctrl.belastung">
+                        <option>20</option>
+                        <option>19</option>
+                        <option>18</option>
+                        <option>17</option>
+                        <option>16</option>
+                        <option>15</option>
+                        <option>14</option>
+                        <option>13</option>
+                        <option>12</option>
+                        <option>11</option>
+                        <option>10</option>
+                        <option>9</option>
+                        <option>8</option>
+                        <option>7</option>
+                        <option>6</option>
+                    </select>
+                </div>
+                <img src="{{$ctrl.getInfoImage()}}" alt="Belastung Info" ng-show="$ctrl.showInfoImage" ng-click="$ctrl.showInfoImage = false;">
+                <div class="form-group">
+                    <label for="zuege12">Anzahl Züge 1-2</label>
+                    <input type="number" class="form-control" id="zuege12" ng-model="$ctrl.zuege12">
+                </div>
+                <div class="form-group">
+                    <label for="zuege23">Anzahl Züge 2-3</label>
+                    <input type="number" class="form-control" id="zuege23" ng-model="$ctrl.zuege23">
+                </div>
+                <div class="form-group">
+                    <label for="zuege34">Anzahl Züge 3-4</label>
+                    <input type="number" class="form-control" id="zuege34" ng-model="$ctrl.zuege34">
+                </div>
+                <div class="form-group">
+                    <label for="wettkampf">Wettkampf (z.B: EYC, MYCC, Trial)</label>
+                    <input type="text" class="form-control" id="wettkampf" ng-model="$ctrl.wettkampf">
+                </div>
+
+                <div class="panel panel-default" style="margin-left:16px">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Status Daten</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="emoji-group form-group">
+                            <label for="gefuehl">Gefühl {{$ctrl.statusData.gefuehl ? '(' + $ctrl.statusData.gefuehl + ')' : ''}}</label>
+                            <input type="hidden" id="gefuehl"/>
+                            <img src="{{$ctrl.statusData.image1}}" alt="Gefühl 1 (super)" ng-click="$ctrl.selectImage1()" class="gefuehlEmojiFirst">
+                            <img src="{{$ctrl.statusData.image2}}" alt="Gefühl 2 (gut)" ng-click="$ctrl.selectImage2()" class="gefuehlEmoji">
+                            <img src="{{$ctrl.statusData.image3}}" alt="Gefühl 3 (so so)" ng-click="$ctrl.selectImage3()" class="gefuehlEmoji">
+                            <img src="{{$ctrl.statusData.image4}}" alt="Gefühl 4 (schlecht)" ng-click="$ctrl.selectImage4()" class="gefuehlEmoji">
+                        </div>
+                        <div class="form-group">
+                            <label for="schlaf">Schlaf (Stunden)</label>
+                            <input type="number" class="form-control" id="schlaf" ng-model="$ctrl.statusData.schlaf">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="sonstiges">Sonstiges</label>
+                    <input type="text" class="form-control" id="sonstiges" ng-model="$ctrl.sonstiges">
+                </div>
+
+                <button type="submit" class="btn btn-primary" ng-disabled="!$ctrl.username" ng-click="$ctrl.submitWorkout()">OK</button>
+                <button type="submit" class="btn btn-default" ng-click="$ctrl.cancelWorkout()">Abbrechen</button>
+            </form>
+
+        </div>
+
+    </div>
+</main>
+

@@ -1,0 +1,11 @@
+{
+  "WO_NEW_SUBTITLE": "This text is translated by ngTranslate",
+  "WO_NEW_TEXT": "Here you'll find information about Climbing Logbook",
+  "LOGIN_TITLE": "Login",
+  "USERNAME": "Username",
+  "USERNAME_REQUIRED": "The username is required",
+  "PASSWORD": "Password",
+  "PASSWORD_REQUIRED": "The password is required",
+  "LOGIN_BUTTON": "Login",
+  "LOGIN_ERROR": "It was not possible to log you in"
+}

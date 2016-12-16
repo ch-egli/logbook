@@ -1,0 +1,27 @@
+<messages></messages>
+<main>
+    <div class="container">
+        <div class="jumbotron">
+            <h1>RZ-BeO Trainings-Logbook</h1>
+            <p>Bitte logge dich ein...</p>
+        </div>
+
+        <form name="$ctrl.loginForm">
+            <div ng-show="error" class="alert alert-danger">{{error}}</div>
+            <div class="form-group">
+                <div class="form-group">
+                    <label for="benutzer">Benutzer</label>
+                    <input type="text" class="form-control" id="benutzer" ng-model="$ctrl.benutzername">
+                    <label for="benutzer">Passwort</label>
+                    <input type="password" class="form-control" id="passwort" ng-model="$ctrl.passwort">
+                </div>
+                <div class="form-group">
+                    <label style="padding-right:10px;font-weight:normal;">
+                        <input id="rememberMe" type="checkbox" ng-model="$ctrl.rememberMe"> Login Daten speichern</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" ng-click="$ctrl.submitLogin()">Login</button>
+        </form>
+
+    </div>
+</main>
