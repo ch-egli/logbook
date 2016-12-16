@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "first che esta-web-js project",
   "dependencies": {
-    "angular": "^1.5.2",
-    "angular-cookies": "^1.5.2",
-    "angular-resource": "^1.5.2",
-    "angular-animate": "^1.5.2",
-    "angular-touch": "^1.5.2",
+    "angular": "1.5.8",
+    "angular-cookies": "1.5.8",
+    "angular-resource": "1.5.8",
+    "angular-animate": "1.5.8",
+    "angular-touch": "1.5.8",
     "angular-translate": "^2.8.1",
     "angular-translate-loader-static-files": "^2.8.1",
     "angular-ui-bootstrap": "^1.1.0",
@@ -17,7 +17,7 @@
     "jquery": "^2.2.0"
   },
   "devDependencies": {
-    "angular-mocks": "^1.5.2",
+    "angular-mocks": "1.5.8",
     "babel-core": "^5.4.2",
     "babel-loader": "^5.0.0",
     "browser-sync-webpack-plugin": "^1.0.0",
