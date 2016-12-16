@@ -59,6 +59,7 @@ public class ComputeResultController {
 
     @RequestMapping(value="/user/{benutzername}/excelresults/{year}", method=RequestMethod.GET)
     public void getExportedExcelFile(@PathVariable Integer year, @PathVariable String benutzername, HttpServletResponse response) {
+        LOGGER.info("calling getExportedExcelFile with params '{}' and '{}'", benutzername, year);
 
         if (year < 2000 || year > 2030) {
             throw new BadRequestException("No workouts for year '" + year + "' found");

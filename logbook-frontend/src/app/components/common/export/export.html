@@ -9,7 +9,7 @@
         </div>
 
         <form name="exportForm">
-            <div class="form-group">
+            <div class="form-group" ng-show="$ctrl.oAuthService.isTrainer()">
                 <label for="athlete">AthletIn</label>
                 <select class="form-control" id="athlete" ng-model="$ctrl.athlete" ng-options="option.id for option in $ctrl.athletes track by option.id">
                 </select>
@@ -17,15 +17,13 @@
             <div class="form-group">
                 <label for="year">Jahr</label>
                 <select class="form-control" id="year" ng-model="$ctrl.year">
-                    <option>2016</option>
-                    <option>2017</option>
-                    <option>2018</option>
-                    <option>2019</option>
-                    <option>2020</option>
-                    <option>2021</option>
-                    <option>2022</option>
-                    <option>2023</option>
-                    <option>2024</option>
+                    <option ng-selected="$ctrl.year === 2016">2016</option>
+                    <option ng-selected="$ctrl.year === 2017">2017</option>
+                    <option ng-selected="$ctrl.year === 2018">2018</option>
+                    <option ng-selected="$ctrl.year === 2019">2019</option>
+                    <option ng-selected="$ctrl.year === 2020">2020</option>
+                    <option ng-selected="$ctrl.year === 2021">2021</option>
+                    <option ng-selected="$ctrl.year === 2022">2022</option>
                 </select>
             </div>
 

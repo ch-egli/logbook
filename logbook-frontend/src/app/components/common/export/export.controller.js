@@ -7,22 +7,27 @@
  */
 class ExportController {
     /*@ngInject*/
-    constructor(config, $log, $state, workoutsService) {
+    constructor(config, $log, $state, workoutsService, oAuthService, ) {
         this.config = config;
         this.$log = $log;
         this.$state = $state;
         this.workoutsService = workoutsService;
+        this.oAuthService = oAuthService;
 
         this.title = 'Trainingseinheiten nach Excel exportieren...';
 
         this.athlete = null;
         this.athletes = this.config.athletes;
 
-        this.year = 2016;
+        this.year = new Date().getFullYear();
     }
 
     getExport() {
-        this.workoutsService.exportWorkoutsToExcel(this.year, this.athlete.name);
+        if (!this.athlete) {
+            this.workoutsService.exportWorkoutsToExcel(this.year);
+        } else {
+            this.workoutsService.exportWorkoutsToExcel(this.year, this.athlete.name);
+        }
 
         // navigate home...
         this.$state.go('home');

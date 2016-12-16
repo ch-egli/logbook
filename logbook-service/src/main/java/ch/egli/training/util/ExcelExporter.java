@@ -92,7 +92,7 @@ public class ExcelExporter {
                 try {
                     sheet.protectSheet(null);
                 } catch (Exception ex) {
-                    LOGGER.info("unprotecting sheet " + sheet.getSheetName() + " has failed.");
+                    LOGGER.debug("unprotecting sheet " + sheet.getSheetName() + " has failed.");
                 }
                 currentSheetName = sheetName;
             }
@@ -127,7 +127,7 @@ public class ExcelExporter {
                 try {
                     sheet.protectSheet(null);
                 } catch (Exception ex) {
-                    LOGGER.info("unprotecting sheet " + sheet.getSheetName() + " has failed.");
+                    LOGGER.debug("unprotecting sheet " + sheet.getSheetName() + " has failed.");
                 }
                 currentSheetName = sheetName;
             }
