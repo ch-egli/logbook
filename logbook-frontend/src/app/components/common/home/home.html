@@ -1,0 +1,101 @@
+<navbar></navbar>
+<messages></messages>
+<main>
+    <style>
+        .ng-table th {
+            text-align: left;
+        }
+        @media only screen and (max-width: 767px) {
+            .ng-table-counts {
+                display: none;
+            }
+        }
+        .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+            color: #C60018;
+            background-color: white;
+            border: none;
+            border-bottom-color: transparent;
+            cursor: default;
+        }
+        .nav-tabs {
+            border-bottom: 1px solid #DDDDDD;
+        }
+        .tab-container {
+            margin-top: 24px;
+        }
+        .weekday {
+            float: left;
+            width: 2.1em;
+        }
+        .colMinWithForDate {
+            float: left;
+            width: 100px;
+        }
+    </style>
+    <div class="container">
+        <div class="jumbotron">
+            <h1>{{ $ctrl.title }}</h1>
+            <p>{{ $ctrl.welcomeMessage }}</p>
+        </div>
+
+        <uib-tabset active="$ctrl.activeTab">
+            <uib-tab index="0" select="$ctrl.setActiveTab(0)">
+
+                <uib-tab-heading><h2>Letzte Trainingseinheiten</h2></uib-tab-heading>
+                <div class="container tab-container">
+
+
+                    <table ng-table="$ctrl.tableParamsWo" show-filter="{{ $ctrl.isTrainer() ? 'true' : 'false' }}" class="table table-striped">
+                        <tr ng-repeat="w in $data track by w.id">
+                            <td data-title="'Datum'" class="colMinWithForDate">
+                                <span class="weekday">{{ w.datum | date:'EEE' | weekdayfilter }}, </span>
+                                <a ui-sref="viewwo({id: w.id})" title="Daten anzeigen">{{ w.datum | date:'dd.MM.yy' }}</a>
+                            </td>
+                            <td data-title="'Benutzer'" filter="{ benutzername: 'select'}" filter-data="$ctrl.athletes">{{ w.benutzername }}</td>
+                            <td data-title="'Ort'">{{ w.ort }}</td>
+                            <td data-title="'Dauer'" header-class="'hidden-xs'" class="hidden-xs">{{ w.trainingszeit }}</td>
+                            <td data-title="'Belastung'" header-class="'hidden-xs'" class="hidden-xs">{{ w.belastung }}</td>
+                            <td data-title="'Züge12'" header-class="'hidden-xs'" class="hidden-xs">{{ w.zuege12 }}</td>
+                            <td data-title="'Züge23'" header-class="'hidden-xs'" class="hidden-xs">{{ w.zuege23 }}</td>
+                            <td data-title="'Züge34'" header-class="'hidden-xs'" class="hidden-xs">{{ w.zuege34 }}</td>
+                            <td data-title="''" style="white-space:nowrap;">
+                                <span ng-show="$ctrl.isMyWorkout(w)">
+                                    <a ui-sref="editwo({id: w.id})" title="Bearbeiten"><span class="glyphicon glyphicon-edit"></span></a>  |
+                                    <a ng-click="$ctrl.askAndDelete(w)" title="Loeschen"><span class="glyphicon glyphicon-remove"></span></a>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="checkbox" ng-show="$ctrl.hasEgliSistersRole()">
+                        <label style="padding-right:10px;">
+                            <input id="filter" type="checkbox" ng-model="$ctrl.filter" ng-change="$ctrl.onFilterChanged($ctrl.filter)"> nur eigene Trainingseinheiten anzeigen</label>
+                    </div>
+                </div>
+            </uib-tab>
+
+            <uib-tab index="1" select="$ctrl.setActiveTab(1)">
+                <uib-tab-heading><h2>Status</h2></uib-tab-heading>
+
+                <div class="container tab-container">
+                    <table ng-table="$ctrl.tableParamsStatus" show-filter="{{ $ctrl.isTrainer() ? 'true' : 'false' }}" class="table table-striped">
+                        <tr ng-repeat="s in $data track by s.id">
+                            <td data-title="'Datum'"  class="colMinWithForDate"><span class="weekday">{{ s.datum | date:'EEE' | weekdayfilter }}, </span>{{ s.datum | date:'dd.MM.yy' }}</td>
+                            <td data-title="'Benutzer'" ng-if="$ctrl.isTrainer()" ng-show="$ctrl.isTrainer()" filter="{ benutzername: 'select'}" filter-data="$ctrl.athletes">{{ s.benutzername }}</td>
+                            <td data-title="'Schlaf'">{{ s.schlaf }}</td>
+                            <td data-title="'Gefuehl'">{{ s.gefuehl }}</td>
+                            <td data-title="'Bemerkung'">{{ s.bemerkung }}</td>
+                            <td data-title="''">
+                                <span ng-show="$ctrl.isMyStatus(s)">
+                                    <a ui-sref="editstatus({id: s.id})" title="Bearbeiten"><span class="glyphicon glyphicon-edit"></span></a>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </uib-tab>
+
+        </uib-tabset>
+
+    </div>
+</main>
