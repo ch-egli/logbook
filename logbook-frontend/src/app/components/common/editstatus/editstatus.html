@@ -1,0 +1,90 @@
+<navbar xmlns="http://www.w3.org/1999/html"></navbar>
+<main>
+    <style>
+        .full button span {
+            background-color: limegreen;
+            border-radius: 32px;
+            color: black;
+        }
+        .partially button span {
+            background-color: orange;
+            border-radius: 32px;
+            color: black;
+        }
+        .gefuehlEmoji {
+            margin-left: 6px;
+            margin-right: 6px;
+            width: 34px;
+            height: 34px;
+        }
+        .gefuehlEmojiFirst {
+            margin-left: 12px;
+            margin-right: 6px;
+            width: 34px;
+            height: 34px;
+        }
+        .emoji-group {
+            margin-bottom: 22px;
+            margin-top: 22px;
+            white-space: nowrap;
+        }
+    </style>
+    <div class="container">
+        <div class="jumbotron">
+            <div>
+                <h1>
+                    <small>{{ $ctrl.title }}</small>
+                </h1>
+            </div>
+        </div>
+        <div class="container">
+
+            <form name="$ctrl.statusForm">
+
+                <div class="form-group">
+                    <label for="datum">Datum</label>
+                    <p class="input-group">
+                        <input type="text"
+                               class="form-control"
+                               uib-datepicker-popup="dd.MM.yyyy"
+                               id="datum"
+                               ng-model="$ctrl.statusData.datum"
+                               is-open="$ctrl.popup1.opened"
+                               datepicker-options="dateOptions"
+                               ng-required="true"
+                               close-text="Schliessen"/>
+                    <span class="input-group-btn">
+                        <button type="button"
+                                class="btn btn-default"
+                                ng-click="$ctrl.open1()">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                    </span>
+                    </p>
+                </div>
+                <div class="emoji-group form-group">
+                    <label for="gefuehl">Gefühl {{$ctrl.statusData.gefuehl ? '(' + $ctrl.statusData.gefuehl + ')' : ''}}</label>
+                    <input type="hidden" id="gefuehl"/>
+                    <img src="{{$ctrl.statusData.image1}}" alt="Gefühl 1 (super)" ng-click="$ctrl.selectImage1()" class="gefuehlEmojiFirst">
+                    <img src="{{$ctrl.statusData.image2}}" alt="Gefühl 2 (gut)" ng-click="$ctrl.selectImage2()" class="gefuehlEmoji">
+                    <img src="{{$ctrl.statusData.image3}}" alt="Gefühl 3 (so so)" ng-click="$ctrl.selectImage3()" class="gefuehlEmoji">
+                    <img src="{{$ctrl.statusData.image4}}" alt="Gefühl 4 (schlecht)" ng-click="$ctrl.selectImage4()" class="gefuehlEmoji">
+                </div>
+                <div class="form-group">
+                    <label for="schlaf">Schlaf (Stunden)</label>
+                    <input type="number" class="form-control" id="schlaf" ng-model="$ctrl.statusData.schlaf">
+                </div>
+                <div class="form-group">
+                    <label for="bemerkung">Bemerkung</label>
+                    <input type="text" class="form-control" id="bemerkung" ng-model="$ctrl.statusData.bemerkung">
+                </div>
+
+                <button type="submit" class="btn btn-primary" ng-disabled="!$ctrl.statusData.username" ng-click="$ctrl.submitStatus()">OK</button>
+                <button type="submit" class="btn btn-default" ng-click="$ctrl.cancelStatus()">Abbrechen</button>
+            </form>
+
+        </div>
+
+    </div>
+</main>
+
