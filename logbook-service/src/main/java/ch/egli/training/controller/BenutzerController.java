@@ -4,6 +4,8 @@ import ch.egli.training.exception.BadRequestException;
 import ch.egli.training.model.Benutzer;
 import ch.egli.training.repository.BenutzerRepository;
 import ch.egli.training.util.ResourceValidator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * REST controller for accessing users.
@@ -26,7 +31,11 @@ import java.net.URI;
 @RequestMapping({"/v1/"})
 public class BenutzerController {
 
+    private static final Logger LOGGER = LogManager.getLogger(BenutzerController.class.getName());
+
     private final static String HIDDEN_PASSWORD = "*****";
+
+    private final static String ROLE_ATHLETE = "athlet";
 
     @Autowired
     BenutzerRepository benutzerRepository;
@@ -39,6 +48,19 @@ public class BenutzerController {
     public ResponseEntity<Iterable<Benutzer>> getAllUsers() {
         final Iterable<Benutzer> allUsers = benutzerRepository.findAll();
         return new ResponseEntity<Iterable<Benutzer>>(allUsers, HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/athletes", method= RequestMethod.GET)
+    public ResponseEntity<Iterable<String>> getUserNames() {
+        final Iterable<Benutzer> allUsers = benutzerRepository.findAll();
+        final List<String> allAthletes = new ArrayList<>();
+        for (Benutzer benutzer : allUsers) {
+            if (benutzer.getRollen().contains(ROLE_ATHLETE)) {
+                allAthletes.add(benutzer.getBenutzername());
+            }
+        }
+        LOGGER.info("All athlete's names: {}", Arrays.toString(allAthletes.stream().toArray(String[]::new)));
+        return new ResponseEntity<Iterable<String>>(allAthletes, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('admin')")

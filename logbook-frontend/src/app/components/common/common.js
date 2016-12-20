@@ -21,9 +21,12 @@ import Workouts from './workouts/workouts';
 import Messages from './messages/messages';
 import Theme from './theme/theme';
 import About from './about/about';
+import Benutzer from './benutzer/benutzer';
 
 let commonModule = angular.module('app.components.common', [
-    Home.name, NewWo.name, NewStatus.name, EditWo.name, EditStatus.name, ViewWo.name, Info.name, Export.name, Navbar.name, Workouts.name, Status.name, Messages.name, Theme.name, About.name
+    Home.name, NewWo.name, NewStatus.name, EditWo.name, EditStatus.name,
+    ViewWo.name, Info.name, Export.name, Navbar.name, Workouts.name, Status.name,
+    Messages.name, Theme.name, About.name, Benutzer.name
 ]);
 
 export default commonModule;

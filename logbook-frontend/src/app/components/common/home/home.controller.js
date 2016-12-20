@@ -9,17 +9,18 @@ import modalConfirmDeletion from "./confirmDeletion.html"
 
 class HomeController {
     /*@ngInject*/
-    constructor(config, workoutsService, statusService, oAuthService, $log, $uibModal, $state, $window, NgTableParams) {
+    constructor(config, workoutsService, statusService, benutzerService, oAuthService, $log, $uibModal, $state, $window, NgTableParams) {
         this.config = config;
         this.workoutsService = workoutsService;
         this.statusService = statusService;
+        this.benutzerService = benutzerService;
         this.oAuthService = oAuthService;
         this.$uibModal = $uibModal;
         this.$log = $log;
         this.$state = $state;
         this.$window = $window;
 
-        this.athletes = this.config.athletes;
+        this.athletes = benutzerService.getAthletes();
 
         this.title = 'RZ-BeO Trainings-Logbook';
         this.welcomeMessage = 'Herzlich Willkommen, ' + this.oAuthService.getFirstname();
