@@ -85,6 +85,33 @@
                 </executions>
             </plugin>
 
+            <!-- Copy built files to cordova folder -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources-to-cordova</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+
+                        <configuration>
+                            <outputDirectory>${basedir}/cordova-app/www</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/build</directory>
+                                    <includes>
+                                        <include>*</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- Maven clean auf Frontend-Ordner -->
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
