@@ -92,7 +92,7 @@
                 <executions>
                     <execution>
                         <id>copy-resources-to-cordova</id>
-                        <phase>install</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
