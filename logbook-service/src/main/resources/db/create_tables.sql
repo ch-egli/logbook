@@ -48,3 +48,11 @@ CREATE TABLE status (
   gefuehl        NUMERIC(3,1),
   bemerkung      TEXT
 );
+
+CREATE TABLE requestlog (
+  id             SERIAL PRIMARY KEY,
+  datum		     TIMESTAMP NOT NULL,
+  benutzer       TEXT NOT NULL,
+  uriFilter      TEXT,
+  message        TEXT
+);

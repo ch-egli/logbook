@@ -2,7 +2,7 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2015.
  */
 
-package ch.egli.training;
+package ch.egli.training.config;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

@@ -1,4 +1,4 @@
-package ch.egli.training;
+package ch.egli.training.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

@@ -28,8 +28,7 @@
             width: 2.1em;
         }
         .colMinWithForDate {
-            float: left;
-            width: 100px;
+            min-width: 100px;
         }
     </style>
     <div class="container">
@@ -84,7 +83,7 @@
                             <td data-title="'Benutzer'" ng-if="$ctrl.isTrainer()" ng-show="$ctrl.isTrainer()" filter="{ benutzername: 'select'}" filter-data="$ctrl.athletes">{{ s.benutzername }}</td>
                             <td data-title="'Schlaf'">{{ s.schlaf }}</td>
                             <td data-title="'Gefuehl'">{{ s.gefuehl }}</td>
-                            <td data-title="'Bemerkung'">{{ s.bemerkung }}</td>
+                            <td data-title="'Bemerkung'" header-class="'hidden-xs'" class="hidden-xs">{{ s.bemerkung }}</td>
                             <td data-title="''">
                                 <span ng-show="$ctrl.isMyStatus(s)">
                                     <a ui-sref="editstatus({id: s.id})" title="Bearbeiten"><span class="glyphicon glyphicon-edit"></span></a>

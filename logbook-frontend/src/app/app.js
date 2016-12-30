@@ -45,7 +45,7 @@ angular.module('app', [
 
     // Globale Konfigurationeinstellungen
     .constant('config', {
-        logbookVersion: '1.2.0',
+        logbookVersion: '1.2.1',
 
         //resourceServerUrl: window.location.origin === 'http://localhost:3001' ? 'http://ec2-52-57-16-191.eu-central-1.compute.amazonaws.com:8181/' : window.location.origin + '/',
 
@@ -79,7 +79,7 @@ angular.module('app', [
         workoutDefaultWettkampf: null,
         workoutDefaultSonstiges: null,
 
-        workoutLocations: ["K44", "Matten", "Griffbar", "O'Bloc", "Magnet", "Klettertreff", "Home", "Anderer Ort:"]
+        workoutLocations: ["K44", "Griffbar", "Wilderswil", "O'Bloc", "Magnet", "Klettertreff", "Home", "Anderer Ort:"]
     })
     // Die App als Direktive exportieren
     .directive('app', AppComponent);
