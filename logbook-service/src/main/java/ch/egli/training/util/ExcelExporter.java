@@ -9,6 +9,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotNull;
 import java.io.ByteArrayOutputStream;
@@ -172,6 +173,10 @@ public class ExcelExporter {
      * @param text text to insert
      */
     private static void addTextToCellInRowAtPosition(final Row row, final int pos, final CellStyle cellStyle, final String text) {
+        if (!StringUtils.hasLength(text)) {
+            return;
+        }
+
         final Cell cell = row.getCell(pos);
         final String existingText = cell.getStringCellValue();
         if (hasLength(existingText)) {
