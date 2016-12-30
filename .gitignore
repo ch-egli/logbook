@@ -1,6 +1,7 @@
 target
 node_modules
 dist
+build
 www
 .metadata
 .settings
