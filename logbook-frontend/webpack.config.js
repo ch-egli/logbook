@@ -1,6 +1,7 @@
 /**
  * ESTA WebJS: Webpack Konfigurationsdatei
  */
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webpack = require('webpack');
 var extend = require('node.extend');
 var path = require('path');
@@ -70,7 +71,8 @@ var commonConfig = exports.commonConfig = {
  */
 exports.production = extend({}, commonConfig, {
     output: {
-        path: buildPath
+        path: buildPath,
+        filename: 'hashed-bundle.[hash].js'
     }, plugins: [
         new ngAnnotatePlugin({add: true}),
         new webpack.optimize.DedupePlugin(),
@@ -79,8 +81,12 @@ exports.production = extend({}, commonConfig, {
                 warnings: true
             }
         }),
-        new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js')
-    ], devtool: 'cheap-source-map'
+        new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.hashed-bundle.[hash].js'),
+        new HtmlWebpackPlugin({
+              template: 'index-template.html',
+              filename: 'index.html'
+            })
+    ]
 });
 
 /**
