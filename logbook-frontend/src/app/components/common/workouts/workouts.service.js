@@ -156,7 +156,7 @@ class WorkoutsService {
         if (!user) {
             user = service.authData.name;
         }
-        let downloadUrl = service.config.resourceServerUrl + 'v1/user/' + user + '/excelresults/' + year;
+        let downloadUrl = service.config.resourceServerUrl + 'v1/user/' + user + '/excelresults/' + year + '?requester=' + service.authData.name;
 
         // with jQuery: $("body").append("<iframe src='" + downloadUrl + "' style='display: none;' ></iframe>");
         let iframe = document.createElement("iframe");

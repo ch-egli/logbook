@@ -23,26 +23,38 @@ import java.util.List;
 public class LogbookRequestLoggingFilter extends CommonsRequestLoggingFilter {
     private static final Logger LOGGER = LogManager.getLogger(LogbookRequestLoggingFilter.class.getName());
 
-    private final static String DEFAULT_LOG_USER = "maex";
+    private final static String DEFAULT_LOG_USER_1 = "maex";
+    private final static String DEFAULT_LOG_USER_2 = "jojo";
+    private final static String DEFAULT_LOG_USER_3 = "chrigu";
 
     private final static String LOG_URI_1= "/v1/usrs/";
-    private final static String LOG_URI_2= "/v1/user/";
-    private final static String LOG_URI_3= "/v1/users/";
+    private final static String LOG_URI_2= "/v1/users/";
+
+    private final static String LOG__NOT_URI_1= "/v1/users/all/workouts?page=0";
+    private final static String LOG__NOT_URI_2= "/v1/users/all/status?page=0";
+
+
 
     private List<String> logUsers;
     private List<String> logUris;
+    private List<String> logNotUris;
 
     @Autowired
-    RequestlogRepository requestlogRepository;
+    private RequestlogRepository requestlogRepository;
 
     public LogbookRequestLoggingFilter() {
         logUsers = new ArrayList<>();
-        logUsers.add(DEFAULT_LOG_USER);
+        logUsers.add(DEFAULT_LOG_USER_1);
+        logUsers.add(DEFAULT_LOG_USER_2);
+        logUsers.add(DEFAULT_LOG_USER_3);
 
         logUris = new ArrayList<>();
         logUris.add(LOG_URI_1);
         logUris.add(LOG_URI_2);
-        logUris.add(LOG_URI_3);
+
+        logNotUris = new ArrayList<>();
+        logNotUris.add(LOG__NOT_URI_1);
+        logNotUris.add(LOG__NOT_URI_2);
     }
 
     @Override
@@ -54,9 +66,23 @@ public class LogbookRequestLoggingFilter extends CommonsRequestLoggingFilter {
     protected void beforeRequest(HttpServletRequest request, String message) {
         super.beforeRequest(request, message);
 
+        // only log for the given list of users
         final String user = request.getRemoteUser();
         if (logUsers.contains(user)) {
             String uri = request.getRequestURI();
+            String queryString = request.getQueryString();
+            if (queryString != null) {
+                uri = uri + '?' + queryString;
+            }
+
+            // do not log if uri is in this list
+            for (String logNotUri : logNotUris) {
+                if (uri.contains(logNotUri)) {
+                    return;
+                }
+            }
+
+            // log if uri is in this list
             for (String logUri : logUris) {
                 if (uri.contains(logUri)) {
                     logRequest(user, logUri, message);
@@ -96,5 +122,13 @@ public class LogbookRequestLoggingFilter extends CommonsRequestLoggingFilter {
 
     public void setLogUris(List<String> logUris) {
         this.logUris = logUris;
+    }
+
+    public List<String> getLogNotUris() {
+        return logNotUris;
+    }
+
+    public void setLogNotUris(List<String> logNotUris) {
+        this.logNotUris = logNotUris;
     }
 }

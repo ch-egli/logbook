@@ -3,9 +3,11 @@ package ch.egli.training.controller;
 import ch.egli.training.exception.BadRequestException;
 import ch.egli.training.exception.InternalServerException;
 import ch.egli.training.model.Benutzer;
+import ch.egli.training.model.Requestlog;
 import ch.egli.training.model.Status;
 import ch.egli.training.model.Workout;
 import ch.egli.training.repository.BenutzerRepository;
+import ch.egli.training.repository.RequestlogRepository;
 import ch.egli.training.repository.StatusRepository;
 import ch.egli.training.repository.WorkoutRepository;
 import ch.egli.training.util.ExcelExporter;
@@ -21,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,6 +50,9 @@ public class ComputeResultController {
     private BenutzerRepository benutzerRepository;
 
     @Autowired
+    private RequestlogRepository requestlogRepository;
+
+    @Autowired
     ExcelExporter excelExporter;
 
     @RequestMapping(value="/workouts/charts", method= RequestMethod.GET)
@@ -58,8 +65,11 @@ public class ComputeResultController {
     }
 
     @RequestMapping(value="/user/{benutzername}/excelresults/{year}", method=RequestMethod.GET)
-    public void getExportedExcelFile(@PathVariable Integer year, @PathVariable String benutzername, HttpServletResponse response) {
+    public void getExportedExcelFile(@PathVariable Integer year, @PathVariable String benutzername,
+                                     @RequestParam(name = "requester", required = false) String requester,
+                                     HttpServletResponse response) {
         LOGGER.info("calling getExportedExcelFile with params '{}' and '{}'", benutzername, year);
+        logRequest(requester, "exportToExcel for user '" + benutzername + "' and year " + year);
 
         if (year < 2000 || year > 2030) {
             throw new BadRequestException("No workouts for year '" + year + "' found");
@@ -96,5 +106,17 @@ public class ComputeResultController {
         }
 
     }
+
+    private void logRequest(String requester, String logMessage) {
+        Requestlog requestlog = new Requestlog();
+        Date date = new Date();
+        requestlog.setDatum(new Timestamp(date.getTime()));
+        requester = requester != null ? requester : "unknown";
+        requestlog.setBenutzer(requester);
+        requestlog.setUrifilter("excel-exporter");
+        requestlog.setMessage(logMessage);
+        requestlogRepository.save(requestlog);
+    }
+
 
 }
