@@ -2,10 +2,14 @@ target
 node_modules
 dist
 build
-www
+**/cordova-app/hooks
+**/cordova-app/platforms
+**/cordova-app/plugins
+**/cordova-app/www
 .metadata
 .settings
 .idea
 *.iml
 *.log
 *.lck
+*.bin
