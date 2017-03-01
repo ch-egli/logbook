@@ -158,11 +158,28 @@ class WorkoutsService {
         }
         let downloadUrl = service.config.resourceServerUrl + 'v1/user/' + user + '/excelresults/' + year + '?requester=' + service.authData.name;
 
+/*
         // with jQuery: $("body").append("<iframe src='" + downloadUrl + "' style='display: none;' ></iframe>");
         let iframe = document.createElement("iframe");
         iframe.setAttribute("src", downloadUrl);
         iframe.setAttribute("style", "display: none");
         document.body.appendChild(iframe);
+*/
+
+        this.$http({
+                url: downloadUrl,
+                method: "GET",
+                responseType: "arraybuffer"
+         }).then(function successCallback(response) {
+                   let url = URL.createObjectURL(new Blob([response.data]));
+                   let a = document.createElement('a');
+                   a.href = url;
+                   a.download = 'workouts-' + year + '-' + user + '.xlsx';
+                   a.target = '_blank';
+                   a.click();
+            }, function errorCallback(response) {
+                alert( "failed to get Excel file from server: " + JSON.stringify({data: response.data}));
+            });
     }
 
     _getAuthData() {
