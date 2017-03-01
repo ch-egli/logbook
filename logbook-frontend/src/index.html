@@ -14,6 +14,10 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="theme-color" content="#ffffff">
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src *;
+                       style-src 'self' 'unsafe-inline' 'unsafe-eval';
+                       script-src 'self' 'unsafe-inline' 'unsafe-eval';">
 </head>
 <body ng-app="app" ng-cloak>
 
