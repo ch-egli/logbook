@@ -171,11 +171,14 @@ class WorkoutsService {
                 method: "GET",
                 responseType: "arraybuffer"
          }).then(function successCallback(response) {
-                   let url = URL.createObjectURL(new Blob([response.data]));
+                   let blob = new Blob([ response.data ], { type : 'text/plain' });
+                   let url = (window.URL || window.webkitURL).createObjectURL( blob );
                    let a = document.createElement('a');
                    a.href = url;
                    a.download = 'workouts-' + year + '-' + user + '.xlsx';
-                   a.target = '_blank';
+                   a.target = '_self';
+                   document.body.appendChild(a);
+
                    a.click();
             }, function errorCallback(response) {
                 alert( "failed to get Excel file from server: " + JSON.stringify({data: response.data}));
