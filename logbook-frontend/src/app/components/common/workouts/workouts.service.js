@@ -7,13 +7,14 @@
  */
 class WorkoutsService {
     /*@ngInject*/
-    constructor(config, $resource, $http, $log, $cookies, $state) {
+    constructor(config, $resource, $http, $log, $cookies, $state, FileSaver, Blob) {
         this.$log = $log;
         this.config = config;
         this.$http = $http;
         this.$resource = $resource;
         this.$cookies = $cookies;
         this.$state = $state;
+        this.FileSaver = FileSaver;
 
         this.authData = {};
 
@@ -166,23 +167,17 @@ class WorkoutsService {
         document.body.appendChild(iframe);
 */
 
+        // Version mit Filesaver: funktioniert in Chrome und Opera, Firefox nur vor der Webpack Optimierung
         this.$http({
-                url: downloadUrl,
-                method: "GET",
-                responseType: "arraybuffer"
-         }).then(function successCallback(response) {
-                   let blob = new Blob([ response.data ], { type : 'text/plain' });
-                   let url = (window.URL || window.webkitURL).createObjectURL( blob );
-                   let a = document.createElement('a');
-                   a.href = url;
-                   a.download = 'workouts-' + year + '-' + user + '.xlsx';
-                   a.target = '_self';
-                   document.body.appendChild(a);
-
-                   a.click();
-            }, function errorCallback(response) {
-                alert( "failed to get Excel file from server: " + JSON.stringify({data: response.data}));
-            });
+            url: downloadUrl,
+            method: "GET",
+            responseType: "blob"
+        }).then(function successCallback(response) {
+            let filename = 'workouts-' + year + '-' + user + '.xlsx';
+            service.FileSaver.saveAs(response.data, filename, {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+        }, function errorCallback(response) {
+            alert( "failed to get Excel file from server: " + JSON.stringify({data: response.data}));
+        });
     }
 
     _getAuthData() {

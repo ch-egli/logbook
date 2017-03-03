@@ -6,6 +6,7 @@ class AboutController {
 
         this.aboutMessage = 'Logbook App';
         this.logbookVersion = this.config.logbookVersion;
+        this.metaInfo = document.head.querySelector("[name=app-kind]").content;
     }
 
 }

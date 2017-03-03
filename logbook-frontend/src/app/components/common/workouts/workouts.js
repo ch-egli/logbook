@@ -6,10 +6,11 @@
  * @since 28.01.2016
  */
 import angular from 'angular';
+import ngFileSaver from 'angular-file-saver';
 import workoutsService from './workouts.service';
 
 /*@ngInject*/
-let workoutsModule = angular.module('workoutsService', ['ngResource'])
+let workoutsModule = angular.module('workoutsService', ['ngResource', ngFileSaver])
 
 .service('workoutsService', workoutsService);
 

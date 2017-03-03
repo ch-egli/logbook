@@ -21,6 +21,9 @@ class ExportController {
         this.athletes = benutzerService.getAthletes();
 
         this.year = new Date().getFullYear();
+
+        this.metaInfo = document.head.querySelector("[name=app-kind]").content;
+        this.isAndroid = this.metaInfo === "android";
     }
 
     getExport() {
