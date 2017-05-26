@@ -37,7 +37,7 @@ RUN echo "07 01 * * * root  /root/backup.sh" >> /etc/crontab
 RUN mkdir -p /var/log/supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf 
 
-EXPOSE 5432 8181 80
+EXPOSE 8181 80
 
 # install logbook application
 #
