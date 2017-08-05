@@ -70,6 +70,10 @@ public class Workout {
     private Integer mentaltraining;
 
     @Column
+    @Min(0) @Max(9)
+    private Integer jogging;
+
+    @Column
     private String geraete;
 
     @Column
@@ -222,6 +226,14 @@ public class Workout {
 
     public void setMentaltraining(Integer mentaltraining) {
         this.mentaltraining = mentaltraining;
+    }
+
+    public Integer getJogging() {
+        return jogging;
+    }
+
+    public void setJogging(Integer jogging) {
+        this.jogging = jogging;
     }
 
     public String getGeraete() {

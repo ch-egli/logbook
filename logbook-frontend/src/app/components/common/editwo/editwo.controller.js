@@ -84,6 +84,7 @@ class EditWoController {
         this.$log.debug('dehnen: ' + this.woData.dehnen);
         this.$log.debug('campus: ' + this.woData.campus);
         this.$log.debug('mentaltraining: ' + this.woData.mentaltraining);
+        this.$log.debug('jogging: ' + this.woData.jogging);
         this.$log.debug('geraete: ' + this.woData.geraete);
         this.$log.debug('belastung: ' + this.woData.belastung);
         this.$log.debug('zuege12: ' + this.woData.zuege12);
@@ -107,6 +108,7 @@ class EditWoController {
             "dehnen": this.woData.dehnen === true ? 1 : null,
             "campus": this.woData.campus === true ? 1 : null,
             "mentaltraining": this.woData.mentaltraining === true ? 1 : null,
+            "jogging": this.woData.jogging === true ? 1 : null,
             "geraete": this.woData.geraete === true ? 1 : null,
             "belastung": this.woData.belastung,
             "zuege12": this.woData.zuege12,

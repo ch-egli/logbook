@@ -35,6 +35,11 @@ public class ExcelExporter {
 
     private static final Logger LOGGER = LogManager.getLogger(ExcelExporter.class.getName());
 
+    private static final String JOGGING_STRING = "Jogging";
+
+    /* Insertion mode if cell already contains a value */
+    private enum Mode { ADD, REPLACE, HIGHER }
+
     /**
      * Export an Excel workbook as an output stream.
      *
@@ -101,19 +106,23 @@ public class ExcelExporter {
 
             addTextToCellInRowAtPosition(sheet.getRow(1), column, null, workout.getOrt());
             addTextToCellInRowAtPosition(sheet.getRow(2), column, null, workout.getWettkampf());
-            addIntegerToCellInRowAtPosition(sheet.getRow(5), column, null, workout.getLead());
-            addIntegerToCellInRowAtPosition(sheet.getRow(6), column, null, workout.getBouldern());
-            addIntegerToCellInRowAtPosition(sheet.getRow(7), column, null, workout.getCampus());
-            addIntegerToCellInRowAtPosition(sheet.getRow(8), column, null, workout.getKraftraum());
-            addIntegerToCellInRowAtPosition(sheet.getRow(9), column, null, workout.getDehnen());
-            addIntegerToCellInRowAtPosition(sheet.getRow(10), column, null, workout.getMentaltraining());
+            addIntegerToCellInRowAtPosition(sheet.getRow(5), column, null, workout.getLead(), Mode.REPLACE);
+            addIntegerToCellInRowAtPosition(sheet.getRow(6), column, null, workout.getBouldern(), Mode.REPLACE);
+            addIntegerToCellInRowAtPosition(sheet.getRow(7), column, null, workout.getCampus(), Mode.REPLACE);
+            addIntegerToCellInRowAtPosition(sheet.getRow(8), column, null, workout.getKraftraum(), Mode.REPLACE);
+            addIntegerToCellInRowAtPosition(sheet.getRow(9), column, null, workout.getDehnen(), Mode.REPLACE);
+            addIntegerToCellInRowAtPosition(sheet.getRow(10), column, null, workout.getMentaltraining(), Mode.REPLACE);
             addTextToCellInRowAtPosition(sheet.getRow(11), column, null, workout.getGeraete());
-            addIntegerToCellInRowAtPosition(sheet.getRow(18), column, null, workout.getBelastung());
-            addIntegerToCellInRowAtPosition(sheet.getRow(19), column, null, workout.getZuege12());
-            addIntegerToCellInRowAtPosition(sheet.getRow(20), column, null, workout.getZuege23());
-            addIntegerToCellInRowAtPosition(sheet.getRow(21), column, null, workout.getZuege34());
-            addIntegerToCellInRowAtPosition(sheet.getRow(23), column, null, workout.getTrainingszeit());
+            addIntegerToCellInRowAtPosition(sheet.getRow(18), column, null, workout.getBelastung(), Mode.HIGHER);
+            addIntegerToCellInRowAtPosition(sheet.getRow(19), column, null, workout.getZuege12(), Mode.ADD);
+            addIntegerToCellInRowAtPosition(sheet.getRow(20), column, null, workout.getZuege23(), Mode.ADD);
+            addIntegerToCellInRowAtPosition(sheet.getRow(21), column, null, workout.getZuege34(), Mode.ADD);
+            addIntegerToCellInRowAtPosition(sheet.getRow(23), column, null, workout.getTrainingszeit(), Mode.ADD);
             addTextToCellInRowAtPosition(sheet.getRow(24), column, null, workout.getSonstiges());
+
+            if (workout.getJogging() != null && workout.getJogging() > 0) {
+                addTextToCellInRowAtPosition(sheet.getRow(24), column, null, JOGGING_STRING);
+            }
         }
 
         currentSheetName = "";
@@ -134,8 +143,8 @@ public class ExcelExporter {
             }
             Integer column = dayOfWeek.ordinal() + 1;
 
-            addNumberToCellInRowAtPosition(sheet.getRow(3), column, null, state.getSchlaf());
-            addNumberToCellInRowAtPosition(sheet.getRow(4), column, null, state.getGefuehl());
+            addNumberToCellInRowAtPosition(sheet.getRow(3), column, null, state.getSchlaf(), Mode.REPLACE);
+            addNumberToCellInRowAtPosition(sheet.getRow(4), column, null, state.getGefuehl(), Mode.HIGHER);
             addTextToCellInRowAtPosition(sheet.getRow(24), column, null, state.getBemerkung());
         }
 
@@ -196,11 +205,27 @@ public class ExcelExporter {
      * @param pos position (starting at 0)
      * @param cellStyle style to apply (ignored if null)
      * @param val numeric value to insert
+     * @param mode insertion mode if cell already contains a value
      */
-    private static void addNumberToCellInRowAtPosition(final Row row, final int pos, final CellStyle cellStyle, final Float val) {
+    private static void addNumberToCellInRowAtPosition(final Row row, final int pos, final CellStyle cellStyle, final Float val, final Mode mode) {
         if (val != null) {
             final Cell cell = row.getCell(pos);
-            cell.setCellValue(val);
+            final double existingVal = cell.getNumericCellValue();
+            double newVal = 0;
+            switch (mode) {
+                case ADD:
+                    newVal = existingVal + val;
+                    break;
+                case HIGHER:
+                    newVal = existingVal > val ? existingVal : val;
+                    break;
+                case REPLACE:
+                    newVal = val;
+                    break;
+                default:
+                    LOGGER.error("Error during Excel export: Invalid mode " + mode + "; val: " + val);
+            }
+            cell.setCellValue(newVal);
             if (cellStyle != null) {
                 cell.setCellStyle(cellStyle);
             }
@@ -214,11 +239,27 @@ public class ExcelExporter {
      * @param pos position (starting at 0)
      * @param cellStyle style to apply (ignored if null)
      * @param val numeric value to insert
+     * @param mode insertion mode if cell already contains a value
      */
-    private static void addIntegerToCellInRowAtPosition(final Row row, final int pos, final CellStyle cellStyle, final Integer val) {
+    private static void addIntegerToCellInRowAtPosition(final Row row, final int pos, final CellStyle cellStyle, final Integer val, final Mode mode) {
         if (val != null) {
             final Cell cell = row.getCell(pos);
-            cell.setCellValue(val);
+            final int existingVal = (int) cell.getNumericCellValue();
+            int newVal = 0;
+            switch (mode) {
+                case ADD:
+                    newVal = existingVal + val;
+                    break;
+                case HIGHER:
+                    newVal = existingVal > val ? existingVal : val;
+                    break;
+                case REPLACE:
+                    newVal = val;
+                    break;
+                default:
+                    LOGGER.error("Error during Excel export: Invalid mode " + mode + "; val: " + val);
+            }
+            cell.setCellValue(newVal);
             if (cellStyle != null) {
                 cell.setCellStyle(cellStyle);
             }

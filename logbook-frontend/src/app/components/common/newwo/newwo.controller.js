@@ -48,6 +48,7 @@ class NewWoController {
         this.dehnen = this.config.workoutDefaultDehnen;
         this.campus = this.config.workoutDefaultCampus;
         this.mentaltraining = this.config.workoutDefaultMentaltraining;
+        this.jogging = this.config.workoutDefaultJogging;
         this.geraete = this.config.workoutDefaultGeraete;
         this.belastung = this.config.workoutDefaultBelastung;
         this.trainingszeit = this.config.workoutDefaultTrainingszeit;
@@ -106,6 +107,7 @@ class NewWoController {
         this.$log.debug('dehnen: ' + this.dehnen);
         this.$log.debug('campus: ' + this.campus);
         this.$log.debug('mentaltraining: ' + this.mentaltraining);
+        this.$log.debug('jogging: ' + this.jogging);
         this.$log.debug('geraete: ' + this.geraete);
         this.$log.debug('belastung: ' + this.belastung);
         this.$log.debug('zuege12: ' + this.zuege12);
@@ -128,6 +130,7 @@ class NewWoController {
             "dehnen": this.dehnen === true ? 1 : null,
             "campus": this.campus === true ? 1 : null,
             "mentaltraining": this.mentaltraining === true ? 1 : null,
+            "jogging": this.jogging === true ? 1 : null,
             "geraete": this.geraete === true ? 1 : null,
             "belastung": this.belastung,
             "zuege12": this.zuege12,
@@ -163,6 +166,7 @@ class NewWoController {
         this.dehnen = this.config.workoutDefaultDehnen;
         this.campus = this.config.workoutDefaultCampus;
         this.mentaltraining = this.config.workoutDefaultMentaltraining;
+        this.jogging = this.config.workoutDefaultJogging;
         this.geraete = this.config.workoutDefaultGeraete;
         this.belastung = this.config.workoutDefaultBelastung;
         this.trainingszeit = this.config.workoutDefaultTrainingszeit;

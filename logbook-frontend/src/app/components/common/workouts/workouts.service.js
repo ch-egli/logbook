@@ -92,6 +92,7 @@ class WorkoutsService {
                     woData.dehnen = data.dehnen ? true : false;
                     woData.campus = data.campus ? true : false;
                     woData.mentaltraining = data.mentaltraining ? true : false;
+                    woData.jogging = data.jogging ? true : false;
                     woData.geraete = data.geraete ? true : false;
                     woData.belastung = '' + data.belastung;
                     woData.zuege12 = data.zuege12;

@@ -45,7 +45,7 @@ angular.module('app', [
 
     // Globale Konfigurationeinstellungen
     .constant('config', {
-        logbookVersion: '1.2.8',
+        logbookVersion: '1.3.0',
 
         //resourceServerUrl: window.location.origin === 'http://localhost:3001' ? 'http://ec2-52-57-16-191.eu-central-1.compute.amazonaws.com:8181/' : window.location.origin + '/',
 
@@ -53,8 +53,8 @@ angular.module('app', [
         authServerUrl: 'http://ec2-52-57-16-191.eu-central-1.compute.amazonaws.com:8181/',
 
 /*
-        resourceServerUrl: 'http://192.168.1.120:8181/',
-        authServerUrl: 'http://192.168.1.120:8181/',
+        resourceServerUrl: 'http://localhost:8181/',
+        authServerUrl: 'http://localhost:8181/',
 */
 
         authClientId: 'logbookAngularClient',
@@ -69,6 +69,7 @@ angular.module('app', [
         workoutDefaultDehnen: null,
         workoutDefaultCampus: null,
         workoutDefaultMentaltraining: null,
+        workoutDefaultJogging: null,
         workoutDefaultGeraete: null,
         workoutDefaultBelastung: '14',
         workoutDefaultTrainingszeit: null,

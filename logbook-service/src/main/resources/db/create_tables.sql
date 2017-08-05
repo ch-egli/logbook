@@ -24,6 +24,7 @@ CREATE TABLE workout (
   kraftraum      INT,
   dehnen         INT,
   mentaltraining INT,
+  jogging        INT,
   geraete        TEXT,
   routen         TEXT,
   art            TEXT,
