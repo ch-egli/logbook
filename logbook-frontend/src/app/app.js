@@ -45,12 +45,12 @@ angular.module('app', [
 
     // Globale Konfigurationeinstellungen
     .constant('config', {
-        logbookVersion: '1.3.6',
+        logbookVersion: '1.3.9',
 
         //resourceServerUrl: window.location.origin === 'http://localhost:3001' ? 'http://ec2-52-57-16-191.eu-central-1.compute.amazonaws.com:8181/' : window.location.origin + '/',
 
-        resourceServerUrl: 'https://ec2-35-156-245-187.eu-central-1.compute.amazonaws.com:8443/',
-        authServerUrl: 'https://ec2-35-156-245-187.eu-central-1.compute.amazonaws.com:8443/',
+        resourceServerUrl: 'https://logbook.snoopfish.ch:8443/',
+        authServerUrl: 'https://logbook.snoopfish.ch:8443/',
 
 /*
         resourceServerUrl: 'https://localhost:8443/',
