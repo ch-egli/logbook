@@ -37,7 +37,13 @@ RUN echo "07 01 * * * root  /root/backup.sh" >> /etc/crontab
 RUN mkdir -p /var/log/supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf 
 
-EXPOSE 8181 80
+# install certbot (let's encrypt)
+#
+RUN echo 'deb http://ftp.debian.org/debian stretch main' >> /etc/apt/sources.list
+RUN apt-get update && apt-get install -y -t stretch python-cffi-backend python-cryptography python-openssl
+RUN apt-get install -y certbot -t jessie-backports
+
+EXPOSE 8181 80 443
 
 # install logbook application
 #
