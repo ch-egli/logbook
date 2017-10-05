@@ -49,8 +49,8 @@ angular.module('app', [
 
         //resourceServerUrl: window.location.origin === 'http://localhost:3001' ? 'http://ec2-52-57-16-191.eu-central-1.compute.amazonaws.com:8181/' : window.location.origin + '/',
 
-        resourceServerUrl: 'ec2-35-156-245-187.eu-central-1.compute.amazonaws.com:8181/',
-        authServerUrl: 'ec2-35-156-245-187.eu-central-1.compute.amazonaws.com:8181/',
+        resourceServerUrl: 'http://ec2-35-156-245-187.eu-central-1.compute.amazonaws.com:8181/',
+        authServerUrl: 'http://ec2-35-156-245-187.eu-central-1.compute.amazonaws.com:8181/',
 
 /*
         resourceServerUrl: 'http://localhost:8181/',
