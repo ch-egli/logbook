@@ -8,7 +8,7 @@ RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
 # install jdk-8, supervisor, python (for installing pip and current aws) and nano
 #
 RUN echo 'deb http://ftp.debian.org/debian jessie-backports main' >> /etc/apt/sources.list
-RUN apt-get update && apt-get install -y supervisor && apt-get -t jessie-backports install -y openjdk-8-jdk && apt-get install -y python && apt-get install -y nano
+RUN apt-get update && apt-get install -y supervisor && apt-get -t jessie-backports install -y openjdk-8-jdk && apt-get install -y python && apt-get install -y nano && apt-get install -y nginx
 
 # is necessary for nano to work properly
 #
@@ -32,6 +32,11 @@ COPY backup.sh /root/
 #
 RUN echo "07 01 * * * root  /root/backup.sh" >> /etc/crontab
 
+COPY renew-certificate.sh /root/renew-certificate.sh
+RUN chmod 775 /root/renew-certificate.sh
+RUN echo "13 2 * * * root  /root/renew-certificate.sh" >> /etc/crontab
+
+
 # supervisor: create directory for logs and copy config file
 #
 RUN mkdir -p /var/log/supervisor
@@ -43,7 +48,7 @@ RUN echo 'deb http://ftp.debian.org/debian stretch main' >> /etc/apt/sources.lis
 RUN apt-get update && apt-get install -y -t stretch python-cffi-backend python-cryptography python-openssl
 RUN apt-get install -y certbot -t jessie-backports
 
-EXPOSE 8181 80 443
+EXPOSE 80 443 8080
 
 # install logbook application
 #

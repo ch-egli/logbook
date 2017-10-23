@@ -1,0 +1,18 @@
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name logbook.snoopfish.ch;
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+
+    location ~ /.well-known {
+        allow all;
+    }
+
+    # reverse proxy to port 8080
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+    }
+
+}
