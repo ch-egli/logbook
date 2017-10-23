@@ -34,7 +34,7 @@ RUN echo "07 01 * * * root  /root/backup.sh" >> /etc/crontab
 
 COPY renew-certificate.sh /root/renew-certificate.sh
 RUN chmod 775 /root/renew-certificate.sh
-RUN echo "13 2 * * * root  /root/renew-certificate.sh" >> /etc/crontab
+RUN echo "13 02 * * * root  /root/renew-certificate.sh" >> /etc/crontab
 
 
 # supervisor: create directory for logs and copy config file
@@ -47,6 +47,11 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN echo 'deb http://ftp.debian.org/debian stretch main' >> /etc/apt/sources.list
 RUN apt-get update && apt-get install -y -t stretch python-cffi-backend python-cryptography python-openssl
 RUN apt-get install -y certbot -t jessie-backports
+
+RUN unlink /etc/nginx/sites-enabled/default
+RUN mkdir /var/www/logbook.snoopfish.ch
+COPY logbook.snoopfish.ch.conf /etc/nginx/conf.d/logbook.snoopfish.ch.conf
+COPY logbook.snoopfish.ch.conf.init /etc/nginx/conf.d/logbook.snoopfish.ch.conf.init
 
 EXPOSE 80 443 8080
 

@@ -6,8 +6,9 @@ server {
     root /var/www/html;
     index index.html index.htm index.nginx-debian.html;
 
-    location ~ /.well-known {
+    location ^~ /.well-known {
         allow all;
+        alias /var/www/logbook.snoopfish.ch/.well-known;
     }
 
     # reverse proxy to port 8080
