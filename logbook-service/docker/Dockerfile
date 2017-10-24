@@ -53,6 +53,9 @@ RUN mkdir /var/www/logbook.snoopfish.ch
 COPY logbook.snoopfish.ch.conf /etc/nginx/conf.d/logbook.snoopfish.ch.conf
 COPY logbook.snoopfish.ch.conf.init /etc/nginx/conf.d/logbook.snoopfish.ch.conf.init
 
+# see https://stackoverflow.com/questions/43323754/cannot-make-remove-an-entry-for-the-specified-session-cron
+RUN sed -i '/session    required     pam_loginuid.so/c\#session    required   pam_loginuid.so' /etc/pam.d/cron
+
 EXPOSE 80 443 8080
 
 # install logbook application
