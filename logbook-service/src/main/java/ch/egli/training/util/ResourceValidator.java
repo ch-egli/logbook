@@ -5,6 +5,7 @@ import ch.egli.training.model.Benutzer;
 import ch.egli.training.model.Workout;
 import ch.egli.training.repository.BenutzerRepository;
 import ch.egli.training.repository.WorkoutRepository;
+import org.codehaus.jackson.map.RuntimeJsonMappingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +35,12 @@ public class ResourceValidator {
         final Workout workout = workoutRepository.findOne(workoutId);
         if (workout == null) {
             throw new ResourceNotFoundException("Workout with id " + workoutId + " not found");
+        }
+    }
+
+    public void validateYear(final Integer year) throws RuntimeException {
+        if (year < 2015 || year > 2050) {
+            throw new RuntimeException("Invalid year " + year);
         }
     }
 

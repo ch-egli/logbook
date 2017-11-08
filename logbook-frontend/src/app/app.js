@@ -49,13 +49,13 @@ angular.module('app', [
 
         //resourceServerUrl: window.location.origin === 'http://localhost:3001' ? 'http://ec2-52-57-16-191.eu-central-1.compute.amazonaws.com:8181/' : window.location.origin + '/',
 
+/*
         resourceServerUrl: 'https://logbook.snoopfish.ch:443/',
         authServerUrl: 'https://logbook.snoopfish.ch:443/',
-
-/*
-        resourceServerUrl: 'https://localhost:8443/',
-        authServerUrl: 'https://localhost:8443/',
 */
+
+        resourceServerUrl: 'http://localhost:8080/',
+        authServerUrl: 'http://localhost:8080/',
 
 
         authClientId: 'logbookAngularClient',

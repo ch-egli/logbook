@@ -28,6 +28,8 @@ var commonConfig = exports.commonConfig = {
             'angular-ui-bootstrap',
             'angular-cookies',
             'angular-file-saver',
+            'angular-chart.js',
+            'chart.js',
             'ng-table',
             'bootstrap/dist/css/bootstrap.css',
             'jquery'

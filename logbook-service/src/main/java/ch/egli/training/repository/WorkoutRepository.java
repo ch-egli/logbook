@@ -37,7 +37,7 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long> {
 
     public Workout findByBenutzernameAndId(String benutzername, Long workoutId);
 
-    @Query("select w from Workout w where YEAR(w.datum)=?1 and w.benutzername=?2")
+    @Query("select w from Workout w where YEAR(w.datum)=?1 and w.benutzername=?2 ORDER BY w.datum ASC")
     public List<Workout> findByYearAndBenutzer(Integer year, String benutzername);
 
     @Modifying

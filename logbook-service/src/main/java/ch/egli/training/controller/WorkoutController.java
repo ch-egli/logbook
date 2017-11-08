@@ -146,6 +146,14 @@ public class WorkoutController {
     }
 
 
+    @RequestMapping(value="/users/{benutzername}/workouts/year/{year}", method= RequestMethod.GET)
+    public ResponseEntity<Iterable<Workout>> getWorkoutsByUserAndYear(@PathVariable String benutzername, @PathVariable Integer year) {
+        resourceValidator.validateUser(benutzername);
+        resourceValidator.validateYear(year);
+        Iterable<Workout> workouts = workoutRepository.findByYearAndBenutzer(year, benutzername);
+        return new ResponseEntity<Iterable<Workout>>(workouts, HttpStatus.OK);
+    }
+
     @RequestMapping(value="/users/{benutzername}/workouts/{workoutId}", method= RequestMethod.GET)
     public ResponseEntity<?> getWorkout(@PathVariable String benutzername, @PathVariable Long workoutId) {
         resourceValidator.validateUser(benutzername);

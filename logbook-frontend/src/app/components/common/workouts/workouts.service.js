@@ -62,6 +62,63 @@ class WorkoutsService {
         return {};
     }
 
+    getWorkoutsByUserAndYear1(username, year) {
+        return [1,2,3,4];
+    }
+
+    getWorkoutsByUserAndYear3(username, year) {
+        let service = this;
+        let woData;
+
+        this._setAuthorizationHeader();
+        return this.$http.get(service.config.resourceServerUrl + 'v1/users/' + username + '/workouts/year/' + year);
+    }
+
+    getWorkoutsByUserAndYear2(username, year) {
+        let service = this;
+        let woData;
+        let test1 = [2,4,6,8];
+        if (username) {
+            this._setAuthorizationHeader();
+            let res = this.$http.get(service.config.resourceServerUrl + 'v1/users/' + username + '/workouts/year/' + year);
+            res.success(function(data, status, headers, config) {
+                //console.log('got data: ' + data.length);
+                if (data.length > 0) {
+                    woData = data.map(wo => wo.belastung);
+                }
+                //console.log('data: ' + woData);
+                return woData;
+            });
+            res.error(function(data, status, headers, config) {
+                alert( "failure message: " + JSON.stringify({data: data}));
+            });
+        }
+        //return {};
+    }
+
+    getWorkoutsByUserAndYear(username, year) {
+        let service = this;
+        let workouts = [];
+
+        let res = this.$http.get(service.config.resourceServerUrl + 'v1/users/' + username + '/workouts/year/' + year);
+        res.success(function(data, status, headers, config) {
+            if (data.length > 0) {
+                for (let i=0; i < data.length; i++) {
+                    workouts.push(data[i].belastung);
+                }
+            }
+            return workouts;
+        });
+        res.error(function(data, status, headers, config) {
+            alert( "failed to get usernames from database: " + JSON.stringify({data: data}));
+        });
+
+        return workouts;
+    }
+
+
+    // /users/{benutzername}/workouts/year/{year}
+
     /**
      * Liefert einen bestimmten Workout von der REST-Resource zurueck
      * @param id Die zu suchende workoutId
