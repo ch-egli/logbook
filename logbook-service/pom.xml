@@ -5,7 +5,7 @@
 
 	<groupId>ch.egli.training</groupId>
 	<artifactId>logbook-service</artifactId>
-	<version>1.3.10</version>
+	<version>1.3.19</version>
 	<packaging>jar</packaging>
 
 	<name>logbook-service</name>
