@@ -14,3 +14,4 @@ INSERT INTO benutzer VALUES(default, 'francesca', '$2a$04$a4Kn3rpFhqqPcBuutSVTcu
 INSERT INTO benutzer VALUES(default, 'leon', '$2a$04$Y6tOARZSIUhlI6QZzp.V9Oz3qzoiWfys/vgIW5sNvVNU8lR9PSEmC', 'athlet', 'Leon', 'Niederberger', null, null, null);  -- 99
 INSERT INTO benutzer VALUES(default, 'levin', '$2a$04$EjO5T/HaoxUI52SWVAdW8OLg1sHE4IpqXDkVUZUpHgMZOkHomNke2', 'athlet', 'Levin', 'Straubhaar', null, null, null);  -- 99
 
+INSERT INTO benutzer VALUES(default, 'loic', '$2a$10$QB4jieasC1ciiEOGAL2zcuZec7djB.LXiwIiwEaGZuG6BlYpX.lPK', 'trainer', 'Loic', 'Gaidioz', 'lgaidioz@gmail.com ', null, null);  -- 99
