@@ -49,7 +49,7 @@ public class ExcelExporter {
     public OutputStream exportAllWorkouts(List<Workout> workouts, List<Status> states) {
 
         OutputStream outputStream = null;
-        Resource resource = new ClassPathResource("Vorlage2016.xlsx");
+        Resource resource = new ClassPathResource("Vorlage2019.xlsx");
         try (InputStream inputStream = resource.getInputStream()) {
             outputStream = exportToExcel(inputStream, workouts, states);
         } catch (Exception ex) {

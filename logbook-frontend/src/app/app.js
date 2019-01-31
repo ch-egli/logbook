@@ -53,15 +53,15 @@ angular.module('app', [
         authServerUrl: 'https://logbook.snoopfish.ch:443/',
 
 /*
-        resourceServerUrl: 'https://localhost:8443/',
-        authServerUrl: 'https://localhost:8443/',
+        resourceServerUrl: 'http://localhost:8080/',
+        authServerUrl: 'http://localhost:8080/',
 */
 
 
         authClientId: 'logbookAngularClient',
         authClientSecret: 'myAbcdghij9876Secret',
 
-        workoutDefaultOrt1: 'K44',
+        workoutDefaultOrt1: 'Wilderswil',
         workoutDefaultOrt2: null,
         workoutDefaultSchlaf: 9,
         workoutDefaultLead: null,
@@ -81,7 +81,7 @@ angular.module('app', [
         workoutDefaultWettkampf: null,
         workoutDefaultSonstiges: null,
 
-        workoutLocations: ["K44", "Griffbar", "Wilderswil", "O'Bloc", "Magnet", "Klettertreff", "Home", "Anderer Ort:"]
+        workoutLocations: ["Wilderswil", "Griffbar", "K44", "O'Bloc", "Magnet", "NLZ Biel", "Bimano", "Klettertreff", "Home", "Anderer Ort:"]
     })
     // Die App als Direktive exportieren
     .directive('app', AppComponent);
