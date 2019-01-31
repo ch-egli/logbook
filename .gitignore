@@ -14,7 +14,8 @@ build
 *.lck
 *.bin
 *.jar
+*.pem
 
 credentials
-buildAndDeploy.sh
+buildAndDeploy*
 buildApk.sh
