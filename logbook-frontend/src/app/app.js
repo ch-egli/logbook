@@ -45,7 +45,7 @@ angular.module('app', [
 
     // Globale Konfigurationeinstellungen
     .constant('config', {
-        logbookVersion: '1.4.2',
+        logbookVersion: '1.4.3',
 
         //resourceServerUrl: window.location.origin === 'http://localhost:3001' ? 'http://ec2-52-57-16-191.eu-central-1.compute.amazonaws.com:8181/' : window.location.origin + '/',
 
