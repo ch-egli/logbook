@@ -112,7 +112,7 @@ gulp.task('doc', () => {
  * - Erstellt das Webpack-Bundle und kopiert es nach /target/build
  * - Kopiert index.html nach /target/build
  */
-gulp.task('buildfull', ['test-selenium-webgrid', 'doc'], (done) => {
+gulp.task('buildfull', (done) => {
     gulp.src(path.join(root, 'index.html')).pipe(gulp.dest(paths.build));
 
     return webpack(webpackConfig.production, done);
@@ -128,4 +128,4 @@ gulp.task('build', (done) => {
 /**
  * Gulp-Task: Standardfall mit 'gulp' kopiert das HTML nach /dist und startet Webserver
  */
-gulp.task('default', ['copyHtml', 'serve']);
+gulp.task('default', gulp.series(gulp.parallel('copyHtml', 'serve')));
